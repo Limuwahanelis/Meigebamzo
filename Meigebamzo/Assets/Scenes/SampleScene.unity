@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 565ba055b20220546b4dedecc9a79532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemPrefab: {fileID: 0}
+  _itemPrefab: {fileID: -6513225764554062177, guid: 917226bfca902874fbdf68227ab19fb5, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,7 +683,7 @@ Transform:
   m_GameObject: {fileID: 1803018828}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.40588754, y: -0.05726091, z: -0.03085256}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -807,7 +807,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _availableElementalSpells: []
   _maxNumberOfSelectedElements: 5
+  _mainBody: {fileID: 693786928}
   _spread: 5
+  _thunderSpritePool: {fileID: 463698708}
+  _thunderDuration: 0
+  _thunderCooldown: 0.5
 --- !u!1 &2061750637
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,5 +16,6 @@ public class RaycastFromCamera2D : MonoBehaviour
     private void Update()
     {
         _cameraInWorldPos = _cam.ScreenPointToRay(HelperClass.MousePos).origin;
+        _cameraInWorldPos.z = 0;
     }
 }

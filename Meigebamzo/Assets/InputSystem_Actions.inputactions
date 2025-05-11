@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ElementSelect",
+                    "type": "Button",
+                    "id": "82be8877-7504-4dfd-bfe6-a75abcfc48a2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -249,6 +258,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "63a8f1c7-1794-4b18-9c43-a8e7beb2050e",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "ElementSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c617818-a239-4d91-be4a-dbf4c340153c",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": "",
+                    "action": "ElementSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04587ce5-a53a-4165-8d48-5f469b4348ca",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "Scale(factor=3)",
+                    "groups": "",
+                    "action": "ElementSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

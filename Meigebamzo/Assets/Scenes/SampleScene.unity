@@ -485,8 +485,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 697218453}
-  _controls: {fileID: 0}
+  _controls: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _inputStack: {fileID: 697218452}
+  _spells: {fileID: 1923887765}
 --- !u!114 &697218455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,6 +677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1923887764}
   - component: {fileID: 1923887763}
+  - component: {fileID: 1923887765}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -714,6 +716,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 697218456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1923887765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923887762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62427dae9f9ac041842da0ffdedb1f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxNumberOfSelectedElements: 5
 --- !u!1 &2061750637
 GameObject:
   m_ObjectHideFlags: 0

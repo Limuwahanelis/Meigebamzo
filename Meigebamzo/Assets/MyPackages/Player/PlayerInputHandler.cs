@@ -10,6 +10,7 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] PlayerController _player;
     [SerializeField] InputActionAsset _controls;
     [SerializeField] PlayerInputStack _inputStack;
+    [SerializeField] PlayerSpells _spells;
     private Vector2 _direction;
     // Start is called before the first frame update
     void Start()
@@ -28,5 +29,9 @@ public class PlayerInputHandler : MonoBehaviour
     protected void OnClick()
     {
        _inputStack.CurrentCommand=new MoveInputCommand(_player.CurrentPlayerState,RaycastFromCamera2D.MouseInWorldPos );
+    }
+    protected void OnElementSelect(InputValue inputValue)
+    {
+        _spells.AddElement((Elements.Element)inputValue.Get<float>());
     }
 }

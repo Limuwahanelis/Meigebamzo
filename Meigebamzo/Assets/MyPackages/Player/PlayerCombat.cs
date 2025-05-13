@@ -93,7 +93,7 @@ public class PlayerCombat : MonoBehaviour
         for (; index < hitEnemies.Count; index++)
         {
             IDamagable tmp = hitEnemies[index].GetComponentInParent<IDamagable>();
-            if (tmp != null) tmp.TakeDamage(new DamageInfo(_comboList.comboList[((int)attackType)].Damage, transform.position));
+            if (tmp != null) tmp.TakeDamage(new DamageInfo(_comboList.comboList[((int)attackType)].Damage, transform.position,Elements.Element.PHYSICAL));
         }
         yield return null;
         while (true)
@@ -111,7 +111,7 @@ public class PlayerCombat : MonoBehaviour
                 {
                     hitEnemies.Add(colliders[i]);
                     IDamagable tmp = colliders[i].GetComponentInParent<IDamagable>();
-                    if (tmp != null) tmp.TakeDamage(new DamageInfo(_comboList.comboList[((int)attackType)].Damage, transform.position));
+                    if (tmp != null) tmp.TakeDamage(new DamageInfo(_comboList.comboList[((int)attackType)].Damage, transform.position,Elements.Element.PHYSICAL));
                 }
             }
             yield return null;

@@ -37,12 +37,20 @@ public class PlayerSpells : MonoBehaviour
     public void SetEnemyForThunderAttack(GameObject enemy)
     {
         _enemiesInRange.Add(enemy.GetComponent<Enemy>());
+        enemy.GetComponent<HealthSystem>().OnDeath += OnEnemyDied;
         Logger.Log("ADDed");
     }
     public void RemoveEnemyFromThunderAttack(GameObject enemy)
     {
         _enemiesInRange.Remove(enemy.GetComponent<Enemy>());
+        enemy.GetComponent<HealthSystem>().OnDeath -= OnEnemyDied;
         Logger.Log("Removed");
+    }
+    private void OnEnemyDied(IDamagable damagable)
+    {
+        Enemy enemy = _enemiesInRange.Find(x => (IDamagable)x.GetComponent<HealthSystem>() == damagable);
+        enemy.GetComponent<HealthSystem>().OnDeath -= OnEnemyDied;
+        _enemiesInRange.Remove(_enemiesInRange.Find(x => (IDamagable)x.GetComponent<HealthSystem>() == damagable));
     }
     public void AddElement(Elements.Element element)
     {
@@ -63,6 +71,7 @@ public class PlayerSpells : MonoBehaviour
         ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams(); 
         float angle = Random.Range(-_spread, _spread);
         float spread = _spread;
+        Enemy enemy = null;
         foreach (ParticleSystem p in _paritcles)
         {
             p.transform.transform.position = _mainBody.position;
@@ -75,7 +84,7 @@ public class PlayerSpells : MonoBehaviour
         else
         {
             spread = _spread / 2;
-            Enemy enemy = GetClosesEnemyForThunder();
+            enemy = GetClosesEnemyForThunder();
             direction = (enemy.EnemyRB.position - new Vector2(_mainBody.position.x, _mainBody.position.y)).normalized;
             parameters = SetUpThunderParticleParams(direction, Vector2.Distance(enemy.EnemyRB.transform.position, _mainBody.position) / 2);
 
@@ -91,13 +100,17 @@ public class PlayerSpells : MonoBehaviour
                 angle = Random.Range(-spread, spread);
                 p.transform.transform.Rotate(transform.forward, angle);
                 p.Emit(parameters, 1);
+                if(enemy != null)
+                {
+                    enemy.GetComponent<HealthSystem>().TakeDamage(new DamageInfo(10, _mainBody.transform.position, Elements.Element.ELECTRICITY));
+                }
             }
             else
             {
                 p.transform.transform.Rotate(transform.forward, angles[i]);
             }
             i++;
-           // if (!_canAttackElectricity) return;
+            
         }
         StartCoroutine(ElectricityAttackCooldown(_thunderParticlesPrefab.main.startLifetime.constant-0.02f));
     }

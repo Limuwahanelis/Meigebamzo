@@ -18,7 +18,7 @@ public class CollisionInteractionComponent : MonoBehaviour
     private void Start()
     {
         _pushInfo = new PushInfo( transform.position);
-        _damageInfo = new DamageInfo(_damage,transform.position);
+        _damageInfo = new DamageInfo(_damage,transform.position,Elements.Element.PHYSICAL);
     }
     private void OnCollisionStay2D(Collision2D collision)
     {

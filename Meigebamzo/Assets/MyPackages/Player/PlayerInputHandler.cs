@@ -22,7 +22,7 @@ public class PlayerInputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_isHoldingRMB)
+        if (_isHoldingRMB)
         {
             _spells.ElectricityAttack();
         }
@@ -41,8 +41,12 @@ public class PlayerInputHandler : MonoBehaviour
     }
     protected void OnRMB(InputValue inputValue)
     {
-        if(inputValue.Get<float>()>=1) _isHoldingRMB=true;
-        else _isHoldingRMB=false;
+
+        if (inputValue.Get<float>() >= 1)
+        {
+            _isHoldingRMB = true;
+        }
+        else _isHoldingRMB = false;
 
         
     }

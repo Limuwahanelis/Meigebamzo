@@ -13,6 +13,8 @@ public class HealthSystem : MonoBehaviour,IDamagable
     public int CurrentHP => _currentHP;
     public int MaxHP => _maxHP;
 
+    public Transform Transform => transform;
+
     [SerializeField] protected Collider2D[] _colliders;
     [SerializeField] protected bool _isInvincible;
     [SerializeField] protected HealthBar _hpBar;

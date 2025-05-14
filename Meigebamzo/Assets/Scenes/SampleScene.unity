@@ -6401,6 +6401,7 @@ MonoBehaviour:
   _availableElementalSpells:
   - {fileID: 11400000, guid: 5397c098b783a8641adc97547321baa5, type: 2}
   - {fileID: 11400000, guid: 7dfa0643bd930484d9b1c76dec96b7ba, type: 2}
+  - {fileID: 11400000, guid: e8ac2b5a979233943b108472e281759c, type: 2}
   _maxNumberOfSelectedElements: 5
   _mainBody: {fileID: 693786928}
   _spread: 5

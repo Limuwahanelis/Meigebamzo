@@ -45,13 +45,19 @@ public class PlayerInputHandler : MonoBehaviour
         //_spells.FireAttack();
         if (inputValue.Get<float>() >= 1)
         {
-            _spells.StartAttack();
-            _isHoldingRMB = true;
+            if(_spells.StartAttack())
+            {
+
+                _isHoldingRMB = true;
+            }
         }
         else
         {
-            _spells.EndAttack();
-            _isHoldingRMB = false;
+            if(_isHoldingRMB)
+            {
+                _spells.EndAttack();
+                _isHoldingRMB = false;
+            }
         }
 
         

@@ -78,10 +78,18 @@ public class PlayerSpells : MonoBehaviour
             _selectedElements.Add(_availableElementalSpells.Find(x=>x.Element==element));
         }
     }
-    public void StartAttack()
+    public bool StartAttack()
     {
+        if (_selectedElements.Count == 0) return false;
+        if (!_continousAttacks.TryGetValue(_selectedElements[0].Element, out _))
+        {
+            _selectedElements.Clear();
+            return false;
+        }
         _cutrrentContinousAttack = _continousAttacks[_selectedElements[0].Element];
+        _selectedElements.Clear();
         _cutrrentContinousAttack.StartAttack();
+        return true;
     }
     public void Attack()
     {

@@ -10,6 +10,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] List<PlayerElementalSpells> _availableElementalSpells;
     [SerializeField] int _maxNumberOfSelectedElements;
     [SerializeField] Transform _mainBody;
+    [SerializeField] List<SpriteRenderer> _spellSlotsRenderes = new List<SpriteRenderer>();
     private List<PlayerElementalSpells> _selectedElements = new List<PlayerElementalSpells>();
 
     [Header("Electricity")]
@@ -40,6 +41,10 @@ public class PlayerSpells : MonoBehaviour
     Dictionary<Elements.Element, ContinousAttack> _continousAttacks= new Dictionary<Elements.Element, ContinousAttack>();
     private void Awake()
     {
+        foreach (SpriteRenderer spriteRenderer in _spellSlotsRenderes)
+        {
+            spriteRenderer.gameObject.SetActive(false);
+        }
         _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
         _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab));
     }
@@ -75,7 +80,10 @@ public class PlayerSpells : MonoBehaviour
         if(_selectedElements.Count< _maxNumberOfSelectedElements)
         {
             Logger.Log(element.ToString());
-            _selectedElements.Add(_availableElementalSpells.Find(x=>x.Element==element));
+            PlayerElementalSpells spell = _availableElementalSpells.Find(x => x.Element == element);
+            _selectedElements.Add(spell);
+            _spellSlotsRenderes[_selectedElements.Count - 1].sprite = spell.Sprite;
+            _spellSlotsRenderes[_selectedElements.Count - 1].gameObject.SetActive(true);
         }
     }
     public bool StartAttack()
@@ -84,7 +92,15 @@ public class PlayerSpells : MonoBehaviour
         if (!_continousAttacks.TryGetValue(_selectedElements[0].Element, out _))
         {
             _selectedElements.Clear();
+            foreach(SpriteRenderer spriteRenderer in _spellSlotsRenderes)
+            {
+                spriteRenderer.gameObject.SetActive(false);
+            }
             return false;
+        }
+        foreach (SpriteRenderer spriteRenderer in _spellSlotsRenderes)
+        {
+            spriteRenderer.gameObject.SetActive(false);
         }
         _cutrrentContinousAttack = _continousAttacks[_selectedElements[0].Element];
         _selectedElements.Clear();

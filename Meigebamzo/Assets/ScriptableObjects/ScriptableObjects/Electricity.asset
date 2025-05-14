@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _element: 3
   _attackType: 0
+  _sprite: {fileID: 21300000, guid: 017eb09ca0cbf8e45994f2023d193ac0, type: 3}

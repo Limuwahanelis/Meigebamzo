@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,25 +23,38 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] float _startLifetime;
     [SerializeField] float _length;
     [SerializeField] List<ParticleSystem> _paritcles= new List<ParticleSystem>();
+    [Header("Fire")]
+    [SerializeField] float _fireRange;
+    [SerializeField] float _fireAngle;
+    [SerializeField] Transform _fireEndTran;
+    [SerializeField] Transform _testTran;
+    [SerializeField] ParticleSystem _fireParticleSystem;
+    [SerializeField] PolygonCollider2D _fireTrigger;
+    [SerializeField] int _fireAttackDamage;
+    [SerializeField] float _fireAttackCooldown;
     private List<float> angles = new List<float>() {0,0 };
     private bool _canAttackElectricity = true;
+    private ContinousAttack _cutrrentContinousAttack;
+    private List<Vector2> _fireTriangle;
     List<Enemy> _enemiesInRange = new List<Enemy>();
+    Dictionary<Elements.Element, ContinousAttack> _continousAttacks= new Dictionary<Elements.Element, ContinousAttack>();
     private void Awake()
     {
-        
+        _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _enemiesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
+        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _enemiesInRange, angles, this, _thunderParticlesPrefab));
     }
     private void Update()
     {
         _thunderAttackDetection.up = (RaycastFromCamera2D.MouseInWorldPos-_mainBody.position ).normalized;
 
     }
-    public void SetEnemyForThunderAttack(GameObject enemy)
+    public void SetEnemyForAttack(GameObject enemy)
     {
         _enemiesInRange.Add(enemy.GetComponent<Enemy>());
         enemy.GetComponent<HealthSystem>().OnDeath += OnEnemyDied;
         Logger.Log("ADDed");
     }
-    public void RemoveEnemyFromThunderAttack(GameObject enemy)
+    public void RemoveEnemyFromAttack(GameObject enemy)
     {
         _enemiesInRange.Remove(enemy.GetComponent<Enemy>());
         enemy.GetComponent<HealthSystem>().OnDeath -= OnEnemyDied;
@@ -52,6 +66,10 @@ public class PlayerSpells : MonoBehaviour
         enemy.GetComponent<HealthSystem>().OnDeath -= OnEnemyDied;
         _enemiesInRange.Remove(_enemiesInRange.Find(x => (IDamagable)x.GetComponent<HealthSystem>() == damagable));
     }
+    private void RemoveEnemiesFromRange()
+    {
+        _enemiesInRange.Clear();
+    }
     public void AddElement(Elements.Element element)
     {
 
@@ -61,90 +79,75 @@ public class PlayerSpells : MonoBehaviour
             _selectedElements.Add(_availableElementalSpells.Find(x=>x.Element==element));
         }
     }
-
-    public void ElectricityAttack()
+    public void StartAttack()
     {
-      
-       
-        Vector2 direction =RaycastFromCamera2D.MouseInWorldPos - _mainBody.position;
-        direction.Normalize();
-        ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams(); 
-        float angle = Random.Range(-_spread, _spread);
-        float spread = _spread;
-        Enemy enemy = null;
-        foreach (ParticleSystem p in _paritcles)
-        {
-            p.transform.transform.position = _mainBody.position;
-        }
-
-        if (_enemiesInRange.Count == 0)
-        {
-            parameters = SetUpThunderParticleParams(direction, 1);
-        }
-        else
-        {
-            spread = _spread / 2;
-            enemy = GetClosesEnemyForThunder();
-            direction = (enemy.EnemyRB.position - new Vector2(_mainBody.position.x, _mainBody.position.y)).normalized;
-            parameters = SetUpThunderParticleParams(direction, Vector2.Distance(enemy.EnemyRB.transform.position, _mainBody.position) / 2);
-
-        }
-        int i = 0;
-        foreach (ParticleSystem p in _paritcles)
-        {
-            p.transform.transform.up = direction;
-           
-            if (_canAttackElectricity)
-            {
-                angles[i] = angle;
-                angle = Random.Range(-spread, spread);
-                p.transform.transform.Rotate(transform.forward, angle);
-                p.Emit(parameters, 1);
-                if(enemy != null)
-                {
-                    enemy.GetComponent<HealthSystem>().TakeDamage(new DamageInfo(10, _mainBody.transform.position, Elements.Element.ELECTRICITY));
-                }
-            }
-            else
-            {
-                p.transform.transform.Rotate(transform.forward, angles[i]);
-            }
-            i++;
-            
-        }
-        StartCoroutine(ElectricityAttackCooldown(_thunderParticlesPrefab.main.startLifetime.constant-0.02f));
+        _cutrrentContinousAttack = _continousAttacks[_selectedElements[0].Element];
+        _cutrrentContinousAttack.StartAttack();
     }
-    private Enemy GetClosesEnemyForThunder()
+    public void Attack()
     {
-        Enemy closestEnemy = _enemiesInRange[0];
-        float closestDistance = Vector2.Distance(closestEnemy.EnemyRB.position, _mainBody.position);
-        float dist = 0;
-        foreach(Enemy enemy in _enemiesInRange)
-        {
-            dist = Vector2.Distance(enemy.EnemyRB.position, _mainBody.position);
-            if (dist < closestDistance)
-            {
-                closestDistance = dist;
-                closestEnemy = enemy;
-            }
-        }
-        return closestEnemy;
+        _cutrrentContinousAttack.Attack();
     }
-    private ParticleSystem.EmitParams SetUpThunderParticleParams(Vector2 direction,float length)
+    public void EndAttack()
     {
+        _cutrrentContinousAttack.EndAttack();
+        RemoveEnemiesFromRange();
+    }
+  
+    List<Vector2> GetTriangle()
+    {
+        _fireEndTran.position=_mainBody.transform.position;
+        List<Vector2> toReturn = new List<Vector2>() {new Vector2(),new Vector2(),new Vector2() };
+        Vector2 pointA = _mainBody.transform.position;
+        Vector2 mouseDir= (RaycastFromCamera2D.MouseInWorldPos- _mainBody.transform.position).normalized;
+        Vector2 fireForwardPoint=pointA+mouseDir*_fireRange;
+        Vector2 fireForwardDir = (fireForwardPoint- (Vector2)_mainBody.transform.position);
+
+        float mult=fireForwardPoint.magnitude;
+        _fireEndTran.up = fireForwardDir.normalized;
+
+        Quaternion rot= Quaternion.AngleAxis(_fireAngle / 2, Vector3.forward);
+        Vector2 ABdir = rot * fireForwardDir;
+
+        float aFunParam = ABdir.y / ABdir.x;
+
+        rot = Quaternion.AngleAxis(-_fireAngle / 2, Vector3.forward);
+        Vector2 ACdir = rot * fireForwardDir ;
+
+        toReturn[0]=pointA+ABdir;
+        toReturn[1] = pointA;
+        toReturn[2] = pointA+ACdir;
+        _fireEndTran.position = fireForwardPoint;
         
-        ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams();
-        int spriteCount = _thunderParticlesPrefab.textureSheetAnimation.spriteCount;
-        Vector3 size = new Vector3(_thunderParticlesPrefab.main.startSizeX.constant, length, _thunderParticlesPrefab.main.startSizeZ.constant);
-        _thunderParticlesPrefab.transform.up = direction;
-        parameters.startSize3D = size;
-        return parameters;
+
+        return toReturn;
     }
-    IEnumerator ElectricityAttackCooldown(float cooldown)
+
+    bool SameSide(Vector2 p1, Vector2 p2, Vector2 a, Vector2 b)
     {
-        if (!_canAttackElectricity) yield break;
-        _canAttackElectricity = false;
-        yield return new WaitForSeconds(cooldown);
-        _canAttackElectricity = true;
+        Vector3 cp1 = Vector3.Cross(b - a, p1 - a);
+        Vector3 cp2 = Vector3.Cross(b - a, p2 - a);
+        if (Vector3.Dot(cp1, cp2) >= 0) return true;
+        else return false;
+    }
+
+    bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+    {
+        if (SameSide(p, a, b, c) && SameSide(p, b, a, c)
+            && SameSide(p, c, a, b)) return true;
+        else return false;
+    }
+    #region electricity
+
+    private void OnDrawGizmos()
+    {
+        List<Vector2> points = GetTriangle();
+
+        Gizmos.DrawLine(points[0], points[1]);
+        Gizmos.DrawLine(points[1], points[2]);
+        Gizmos.DrawLine(points[0], points[2]);
+        Gizmos.DrawSphere(points[1]+ (Vector2)(RaycastFromCamera2D.MouseInWorldPos - _mainBody.transform.position).normalized*_fireRange, 0.3f);
+        Gizmos.color = UnityEngine.Color.red;
+        Gizmos.DrawLine(_mainBody.position, _mainBody.position + (RaycastFromCamera2D.MouseInWorldPos - _mainBody.transform.position));
     }
 }

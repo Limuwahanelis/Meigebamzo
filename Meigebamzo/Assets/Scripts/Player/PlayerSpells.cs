@@ -36,12 +36,12 @@ public class PlayerSpells : MonoBehaviour
     private bool _canAttackElectricity = true;
     private ContinousAttack _cutrrentContinousAttack;
     private List<Vector2> _fireTriangle;
-    List<Enemy> _enemiesInRange = new List<Enemy>();
+    List<IDamagable> _damageablesInRange = new List<IDamagable>();
     Dictionary<Elements.Element, ContinousAttack> _continousAttacks= new Dictionary<Elements.Element, ContinousAttack>();
     private void Awake()
     {
-        _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _enemiesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
-        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _enemiesInRange, angles, this, _thunderParticlesPrefab));
+        _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
+        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab));
     }
     private void Update()
     {
@@ -50,25 +50,24 @@ public class PlayerSpells : MonoBehaviour
     }
     public void SetEnemyForAttack(GameObject enemy)
     {
-        _enemiesInRange.Add(enemy.GetComponent<Enemy>());
+        _damageablesInRange.Add(enemy.GetComponent<IDamagable>());
         enemy.GetComponent<HealthSystem>().OnDeath += OnEnemyDied;
         Logger.Log("ADDed");
     }
     public void RemoveEnemyFromAttack(GameObject enemy)
     {
-        _enemiesInRange.Remove(enemy.GetComponent<Enemy>());
+        _damageablesInRange.Remove(enemy.GetComponent<IDamagable>());
         enemy.GetComponent<HealthSystem>().OnDeath -= OnEnemyDied;
         Logger.Log("Removed");
     }
     private void OnEnemyDied(IDamagable damagable)
     {
-        Enemy enemy = _enemiesInRange.Find(x => (IDamagable)x.GetComponent<HealthSystem>() == damagable);
-        enemy.GetComponent<HealthSystem>().OnDeath -= OnEnemyDied;
-        _enemiesInRange.Remove(_enemiesInRange.Find(x => (IDamagable)x.GetComponent<HealthSystem>() == damagable));
+        damagable.OnDeath -= OnEnemyDied;
+        _damageablesInRange.Remove(damagable);
     }
     private void RemoveEnemiesFromRange()
     {
-        _enemiesInRange.Clear();
+        _damageablesInRange.Clear();
     }
     public void AddElement(Elements.Element element)
     {

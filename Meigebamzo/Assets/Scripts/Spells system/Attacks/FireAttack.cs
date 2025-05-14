@@ -7,7 +7,6 @@ public class FireAttack : ContinousAttack
 {
     PlayerSpells _playerSpells;
     ParticleSystem _particleSystem;
-    List<Enemy> _enemies;
     PolygonCollider2D _fireTrigger;
     Transform _mainBody;
      float _fireRange;
@@ -16,11 +15,11 @@ public class FireAttack : ContinousAttack
     private float _attackCooldown;
     private DamageInfo _damageInfo;
     bool _canDealDamage = true;
-    public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<Enemy> enemies,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,float fireAngle, int attackDamage,float attackCooldown) 
+    public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,float fireAngle, int attackDamage,float attackCooldown) 
     {
         _playerSpells = playerSpells;
         _particleSystem = system;
-        _enemies = enemies;
+        _damageablesInRange = damageables;
         _fireTrigger = fireTrigger;
         _mainBody = mainBody;
         _fireRange = fireRange;
@@ -83,9 +82,9 @@ public class FireAttack : ContinousAttack
         _damageInfo.element = Elements.Element.FIRE;
         _damageInfo.dmgPosition= _mainBody.transform.position;
         _damageInfo.dmg = _attackDamage;
-        for(int i=0;i<_enemies.Count;i++)
+        for(int i=0;i< _damageablesInRange.Count;i++)
         {
-            _enemies[i].GetComponent<HealthSystem>().TakeDamage(_damageInfo);
+            _damageablesInRange[i].TakeDamage(_damageInfo);
         }
         _canDealDamage = false;
         yield return new WaitForSeconds(_attackCooldown);

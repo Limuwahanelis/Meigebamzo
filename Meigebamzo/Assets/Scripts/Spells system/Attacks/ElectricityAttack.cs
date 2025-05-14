@@ -8,18 +8,17 @@ public class ElectricityAttack : ContinousAttack
     private Transform _mainBody;
     private float _spread;
     List<ParticleSystem> _particles = new List<ParticleSystem>();
-    List<Enemy> _enemiesInRange = new List<Enemy>();
     private List<float> _angles = new List<float>() { 0, 0 };
     PlayerSpells _playerSpells;
     ParticleSystem _thunderParticlesPrefab;
 
     bool _canAttackElectricity=true;
-    public ElectricityAttack(Transform mainBody, float spread, List<ParticleSystem> particles, List<Enemy> enemiesInRange, List<float> angles, PlayerSpells playerSpells, ParticleSystem thunderParticlesPrefab)
+    public ElectricityAttack(Transform mainBody, float spread, List<ParticleSystem> particles, List<IDamagable> damageablesInRange, List<float> angles, PlayerSpells playerSpells, ParticleSystem thunderParticlesPrefab)
     {
         _mainBody = mainBody;
         _spread = spread;
         _particles = particles;
-        _enemiesInRange = enemiesInRange;
+        _damageablesInRange = damageablesInRange;
         _angles = angles;
         _playerSpells = playerSpells;
         _thunderParticlesPrefab = thunderParticlesPrefab;
@@ -32,22 +31,22 @@ public class ElectricityAttack : ContinousAttack
         ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams();
         float angle = UnityEngine.Random.Range(-_spread, _spread);
         float spread = _spread;
-        Enemy enemy = null;
+        IDamagable damageable = null;
         foreach (ParticleSystem p in _particles)
         { 
             p.transform.transform.position = _mainBody.position;
         }
 
-        if (_enemiesInRange.Count == 0)
+        if (_damageablesInRange.Count == 0)
         {
             parameters = SetUpThunderParticleParams(direction, 1);
         }
         else
         {
             spread = _spread / 2;
-            enemy = GetClosesEnemyForThunder();
-            direction = (enemy.EnemyRB.position - new Vector2(_mainBody.position.x, _mainBody.position.y)).normalized;
-            parameters = SetUpThunderParticleParams(direction, Vector2.Distance(enemy.EnemyRB.transform.position, _mainBody.position) / 2);
+            damageable = GetClosestDamageableForThunder();
+            direction = ((Vector2)damageable.Transform.position - new Vector2(_mainBody.position.x, _mainBody.position.y)).normalized;
+            parameters = SetUpThunderParticleParams(direction, Vector2.Distance(damageable.Transform.position, _mainBody.position) / 2);
 
         }
         int i = 0;
@@ -61,9 +60,9 @@ public class ElectricityAttack : ContinousAttack
                 angle = UnityEngine.Random.Range(-spread, spread);
                 p.transform.transform.Rotate(_playerSpells.transform.forward, angle);
                 p.Emit(parameters, 1);
-                if (enemy != null)
+                if (damageable != null)
                 {
-                    enemy.GetComponent<HealthSystem>().TakeDamage(new DamageInfo(10, _mainBody.transform.position, Elements.Element.ELECTRICITY));
+                    damageable.TakeDamage(new DamageInfo(10, _mainBody.transform.position, Elements.Element.ELECTRICITY));
                 }
             }
             else
@@ -85,21 +84,21 @@ public class ElectricityAttack : ContinousAttack
     {
         
     }
-    private Enemy GetClosesEnemyForThunder()
+    private IDamagable GetClosestDamageableForThunder()
     {
-        Enemy closestEnemy = _enemiesInRange[0];
-        float closestDistance = Vector2.Distance(closestEnemy.EnemyRB.position, _mainBody.position);
+        IDamagable closestDamageable = _damageablesInRange[0];
+        float closestDistance = Vector2.Distance(closestDamageable.Transform.position, _mainBody.position);
         float dist = 0;
-        foreach (Enemy enemy in _enemiesInRange)
+        foreach (IDamagable damagable in _damageablesInRange)
         {
-            dist = Vector2.Distance(enemy.EnemyRB.position, _mainBody.position);
+            dist = Vector2.Distance(damagable.Transform.position, _mainBody.position);
             if (dist < closestDistance)
             {
                 closestDistance = dist;
-                closestEnemy = enemy;
+                closestDamageable = damagable;
             }
         }
-        return closestEnemy;
+        return closestDamageable;
     }
     private ParticleSystem.EmitParams SetUpThunderParticleParams(Vector2 direction, float length)
     {

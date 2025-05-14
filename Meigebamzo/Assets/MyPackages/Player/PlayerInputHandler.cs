@@ -24,7 +24,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (_isHoldingRMB)
         {
-            _spells.ElectricityAttack();
+            _spells.Attack();
+            //_spells.ElectricityAttack();
         }
     }
     public void OnMousePos(InputValue inputValue)
@@ -41,12 +42,17 @@ public class PlayerInputHandler : MonoBehaviour
     }
     protected void OnRMB(InputValue inputValue)
     {
-
+        //_spells.FireAttack();
         if (inputValue.Get<float>() >= 1)
         {
+            _spells.StartAttack();
             _isHoldingRMB = true;
         }
-        else _isHoldingRMB = false;
+        else
+        {
+            _spells.EndAttack();
+            _isHoldingRMB = false;
+        }
 
         
     }

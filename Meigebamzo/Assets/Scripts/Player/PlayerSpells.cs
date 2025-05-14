@@ -137,7 +137,6 @@ public class PlayerSpells : MonoBehaviour
             && SameSide(p, c, a, b)) return true;
         else return false;
     }
-    #region electricity
 
     private void OnDrawGizmos()
     {

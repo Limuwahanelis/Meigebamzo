@@ -7,10 +7,10 @@ public class EnemyDetection : MonoBehaviour
     public UnityEvent<GameObject> OnEnemyLeft;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        OnEnemyDetected?.Invoke(collision.gameObject.GetComponentInParent<Enemy>().gameObject);
+        OnEnemyDetected?.Invoke(collision.gameObject.GetComponentInParent<HealthSystem>().gameObject);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        OnEnemyLeft?.Invoke(collision.gameObject.GetComponentInParent<Enemy>().gameObject);
+        OnEnemyLeft?.Invoke(collision.gameObject.GetComponentInParent<HealthSystem>().gameObject);
     }
 }

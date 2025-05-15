@@ -15,6 +15,7 @@ public class FireAttack : ContinousAttack
     private float _attackCooldown;
     private DamageInfo _damageInfo;
     bool _canDealDamage = true;
+    ParticleSystem.EmitParams _params;
     public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,float fireAngle, int attackDamage,float attackCooldown) 
     {
         _playerSpells = playerSpells;
@@ -26,11 +27,22 @@ public class FireAttack : ContinousAttack
         _fireAngle = fireAngle;
         _attackDamage = attackDamage;
         _attackCooldown = attackCooldown;
+        _params = new ParticleSystem.EmitParams();
     }
     public override void Attack()
     {
         Vector2 direction = RaycastFromCamera2D.MouseInWorldPos - _mainBody.position;
         _particleSystem.transform.up = direction.normalized;
+        ParticleSystem.MainModule mainModule = _particleSystem.main;
+        ParticleSystem.MinMaxCurve curve= mainModule.startRotation;
+        curve.mode = ParticleSystemCurveMode.TwoConstants;
+        float radians = -_particleSystem.transform.rotation.eulerAngles.z * Mathf.PI / 180f;
+        float spreadRad = 15f * Mathf.PI / 180f;
+        curve.constant = radians;
+        Logger.Log(curve.constant);
+        curve.constantMin = radians - spreadRad;
+        curve.constantMax = radians + spreadRad;
+        mainModule.startRotation = curve;
         List<Vector2> _trianglePoints = GetTriangle();
         List<Vector2> tmp = new List<Vector2>() { _mainBody.transform.InverseTransformPoint(_trianglePoints[0]), _mainBody.transform.InverseTransformPoint(_trianglePoints[1]), _mainBody.transform.InverseTransformPoint(_trianglePoints[2]) };
         _fireTrigger.points = tmp.ToArray();

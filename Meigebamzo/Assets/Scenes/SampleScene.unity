@@ -504,10 +504,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 550015820}
-  - component: {fileID: 550015822}
+  - component: {fileID: 550015825}
   - component: {fileID: 550015821}
+  - component: {fileID: 550015823}
+  - component: {fileID: 550015824}
   m_Layer: 7
-  m_Name: GameObject
+  m_Name: Basic zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -548,7 +550,29 @@ MonoBehaviour:
   _maxHP: 100
   _currentHP: 0
   _invincibilityAfterHitDuration: 0
---- !u!114 &550015822
+--- !u!95 &550015823
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550015819}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6478df90ec161314898414c000f54778, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &550015824
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -557,13 +581,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 550015819}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1af47adc4261ae439d766f93998678c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1915dd42fa80bd34fa6a8293ae5fb16a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthSystem: {fileID: 0}
-  _mainBody: {fileID: 253572486}
-  _playerMainBody: {fileID: 693786928}
-  _rb: {fileID: 253572487}
+  animList: {fileID: 11400000, guid: 2e72d04e9565fe74c969e7155f51cdff, type: 2}
+--- !u!114 &550015825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550015819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7941463d5e54b4944baac43e057c7e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _printState: 0
+  _enemyAnimationManager: {fileID: 550015824}
+  _playerTransform: {fileID: 693786928}
+  _mainBody: {fileID: 253572485}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,8 +1553,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661441783}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.9657429, w: 0.2595011}
-  m_LocalPosition: {x: -5.2861133, y: -2.616592, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.8729051, w: -0.48789015}
+  m_LocalPosition: {x: 1.4788177, y: -0.90963244, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

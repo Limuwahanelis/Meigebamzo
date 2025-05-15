@@ -7,5 +7,7 @@ public abstract class EnemyContext
     public Transform playerTransform;
     public Transform enemyTransform;
     public AnimationManager animMan;
+    public EnemyBasicStats stats;
     public MonoBehaviour coroutineHolder;
+
 }

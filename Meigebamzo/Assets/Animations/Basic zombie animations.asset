@@ -12,5 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd4d54c32212e7240ab84aaff9841a04, type: 3}
   m_Name: Basic zombie animations
   m_EditorClassIdentifier: 
-  animations: []
-  animatorController: {fileID: 0}
+  animations:
+  - name: Rise from dead
+    duration: 0.5
+    speed: 1
+    layer: 0
+  - name: Idle
+    duration: 0
+    speed: 1
+    layer: 0
+  - name: Attack
+    duration: 0.33333334
+    speed: 1
+    layer: 0
+  animatorController: {fileID: 9100000, guid: 6478df90ec161314898414c000f54778, type: 2}

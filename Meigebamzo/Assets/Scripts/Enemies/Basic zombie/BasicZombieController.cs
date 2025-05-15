@@ -5,6 +5,9 @@ using System.Linq;
 
 public class BasicZombieController : EnemyController
 {
+    [SerializeField] float _distanceToStartChase;
+    [SerializeField] float _distanceToEndChase;
+    [SerializeField] BasicZombieCombat _combat;
     private BasicZombieContext _context;
     private void Awake()
     {
@@ -21,6 +24,10 @@ public class BasicZombieController : EnemyController
             animMan=_enemyAnimationManager,
             playerTransform=_playerTransform,
             enemyTransform=transform,
+            stats=_enemyBasicStats,
+            distanceToStartChase=_distanceToStartChase,
+            distanceToEndChase=_distanceToEndChase,
+            combat=_combat,
             coroutineHolder=this
         };
 

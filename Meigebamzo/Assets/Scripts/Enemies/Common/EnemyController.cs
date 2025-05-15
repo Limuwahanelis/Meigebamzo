@@ -10,6 +10,7 @@ public abstract class EnemyController : MonoBehaviour
     [Header("Debug"), SerializeField] bool _printState;
     public GameObject MainBody => _mainBody;
     [Header("Enemy common"), SerializeField] protected AnimationManager _enemyAnimationManager;
+    [SerializeField] protected EnemyBasicStats _enemyBasicStats;
     //[SerializeField] protected EnemyHealthSystem2 _healthSystem;
     [SerializeField] protected Transform _playerTransform;
     [SerializeField] protected GameObject _mainBody;
@@ -19,6 +20,10 @@ public abstract class EnemyController : MonoBehaviour
     public EnemyState GetState(Type state)
     {
         return _enemyStates[state];
+    }
+    public virtual void Update()
+    {
+        _currentEnemyState.Update();
     }
     public void ChangeState(EnemyState newState)
     {

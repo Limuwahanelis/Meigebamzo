@@ -1,0 +1,21 @@
+using UnityEngine;
+using UnityEngine.Events;
+
+public class ElementInteractableObject : MonoBehaviour, IDamagable
+{
+    public UnityEvent OnElementInteracted;
+    [SerializeField] Elements.Element _elementToInteractWith;
+    public Transform Transform => transform;
+
+    public event IDamagable.OnDeathEventHandler OnDeath;
+
+    public void Kill()
+    {
+        OnDeath?.Invoke(this);
+    }
+
+    public void TakeDamage(DamageInfo info)
+    {
+        if (info.element == _elementToInteractWith) OnElementInteracted?.Invoke();
+    }
+}

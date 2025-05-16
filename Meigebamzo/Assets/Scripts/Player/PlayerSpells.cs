@@ -56,13 +56,13 @@ public class PlayerSpells : MonoBehaviour
     public void SetEnemyForAttack(GameObject enemy)
     {
         _damageablesInRange.Add(enemy.GetComponent<IDamagable>());
-        enemy.GetComponent<HealthSystem>().OnDeath += OnEnemyDied;
+        enemy.GetComponent<IDamagable>().OnDeath += OnEnemyDied;
         Logger.Log("ADDed");
     }
     public void RemoveEnemyFromAttack(GameObject enemy)
     {
         _damageablesInRange.Remove(enemy.GetComponent<IDamagable>());
-        enemy.GetComponent<HealthSystem>().OnDeath -= OnEnemyDied;
+        enemy.GetComponent<IDamagable>().OnDeath -= OnEnemyDied;
         Logger.Log("Removed");
     }
     private void OnEnemyDied(IDamagable damagable)

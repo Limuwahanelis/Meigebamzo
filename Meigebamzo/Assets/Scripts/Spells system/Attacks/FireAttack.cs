@@ -39,7 +39,6 @@ public class FireAttack : ContinousAttack
         float radians = -_particleSystem.transform.rotation.eulerAngles.z * Mathf.PI / 180f;
         float spreadRad = 15f * Mathf.PI / 180f;
         curve.constant = radians;
-        Logger.Log(curve.constant);
         curve.constantMin = radians - spreadRad;
         curve.constantMax = radians + spreadRad;
         mainModule.startRotation = curve;

@@ -86,10 +86,16 @@ public class PlayerSpells : MonoBehaviour
             _spellSlotsRenderes[_selectedElements.Count - 1].gameObject.SetActive(true);
         }
     }
+    private Elements.Element DetermineAttack()
+    {
+        if(_selectedElements.Find(x=>x.Element==Elements.Element.ELECTRICITY)) return Elements.Element.ELECTRICITY;
+        else if(_selectedElements.Find(x=>x.Element==Elements.Element.FIRE)) return Elements.Element.FIRE;
+        return Elements.Element.PHYSICAL;
+    }
     public bool StartAttack()
     {
         if (_selectedElements.Count == 0) return false;
-        if (!_continousAttacks.TryGetValue(_selectedElements[0].Element, out _))
+        if (DetermineAttack()==Elements.Element.PHYSICAL)
         {
             _selectedElements.Clear();
             foreach(SpriteRenderer spriteRenderer in _spellSlotsRenderes)
@@ -102,7 +108,11 @@ public class PlayerSpells : MonoBehaviour
         {
             spriteRenderer.gameObject.SetActive(false);
         }
-        _cutrrentContinousAttack = _continousAttacks[_selectedElements[0].Element];
+        
+        
+        _cutrrentContinousAttack = _continousAttacks[DetermineAttack()];
+
+        _cutrrentContinousAttack.SetSpells(_selectedElements);
         _selectedElements.Clear();
         _cutrrentContinousAttack.StartAttack();
         return true;

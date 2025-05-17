@@ -16,6 +16,7 @@ public class FireAttack : ContinousAttack
     private DamageInfo _damageInfo;
     bool _canDealDamage = true;
     ParticleSystem.EmitParams _params;
+    
     public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,float fireAngle, int attackDamage,float attackCooldown) 
     {
         _playerSpells = playerSpells;
@@ -52,6 +53,7 @@ public class FireAttack : ContinousAttack
     {
         _particleSystem.Stop(false, ParticleSystemStopBehavior.StopEmitting);
         _fireTrigger.enabled = false;
+        _spells.Clear();
     }
 
     public override void StartAttack()
@@ -90,6 +92,7 @@ public class FireAttack : ContinousAttack
     IEnumerator DamageCor()
     {
         if(!_canDealDamage) yield break;
+        Logger.Log(_spells.Count);
         _damageInfo.element = Elements.Element.FIRE;
         _damageInfo.dmgPosition= _mainBody.transform.position;
         _damageInfo.dmg = _attackDamage;

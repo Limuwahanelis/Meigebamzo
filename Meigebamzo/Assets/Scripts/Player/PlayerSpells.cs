@@ -34,6 +34,10 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] PolygonCollider2D _fireTrigger;
     [SerializeField] int _fireAttackDamage;
     [SerializeField] float _fireAttackCooldown;
+    [Header("Wind")]
+    [SerializeField] List<Transform> _windPushTrans= new List<Transform>();
+    [SerializeField] List<GameObject> _windPushes= new List<GameObject>();
+    
     private List<float> angles = new List<float>() {0,0 };
     private bool _canAttackElectricity = true;
     private ContinousAttack _cutrrentContinousAttack;
@@ -91,12 +95,14 @@ public class PlayerSpells : MonoBehaviour
     {
         if(_selectedElements.Find(x=>x.Element==Elements.Element.ELECTRICITY)) return Elements.Element.ELECTRICITY;
         else if(_selectedElements.Find(x=>x.Element==Elements.Element.FIRE)) return Elements.Element.FIRE;
+        else if (_selectedElements.Find(x=>x.Element==Elements.Element.WIND)) return Elements.Element.WIND;
         return Elements.Element.PHYSICAL;
     }
     public bool StartAttack()
     {
+        Elements.Element attackElement = DetermineAttack();
         if (_selectedElements.Count == 0) return false;
-        if (DetermineAttack()==Elements.Element.PHYSICAL)
+        if (attackElement == Elements.Element.PHYSICAL)
         {
             _selectedElements.Clear();
             foreach(SpriteRenderer spriteRenderer in _spellSlotsRenderes)
@@ -109,14 +115,30 @@ public class PlayerSpells : MonoBehaviour
         {
             spriteRenderer.gameObject.SetActive(false);
         }
-        
-        
-        _cutrrentContinousAttack = _continousAttacks[DetermineAttack()];
 
-        _cutrrentContinousAttack.SetSpells(_selectedElements);
-        _selectedElements.Clear();
-        _cutrrentContinousAttack.StartAttack();
-        return true;
+        if (_continousAttacks.TryGetValue(attackElement, out _))
+        {
+            _cutrrentContinousAttack = _continousAttacks[attackElement];
+
+            _cutrrentContinousAttack.SetSpells(_selectedElements);
+            _selectedElements.Clear();
+            _cutrrentContinousAttack.StartAttack();
+            return true;
+        }
+
+        if(attackElement==Elements.Element.WIND)
+        {
+            int windForce = _selectedElements.FindAll(x => x.Element == Elements.Element.WIND).Count-1;
+
+            _windPushes[windForce].transform.position= _windPushTrans[windForce].transform.position;
+            _windPushes[windForce].transform.up = _electricityTrigger.transform.up;
+            _windPushes[windForce].transform.Rotate(_windPushes[windForce].transform.forward, 45f);
+            _windPushes[windForce].GetComponent<Animator>().SetInteger("PushType",windForce);
+            _windPushes[windForce].GetComponent<Animator>().SetTrigger("Push");
+            _selectedElements.Clear();
+        }
+
+        return false;
     }
     public void Attack()
     {

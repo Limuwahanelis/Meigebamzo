@@ -7,7 +7,7 @@ public class Elements : MonoBehaviour
 {
     public enum Element
     {
-        PHYSICAL=0,FIRE=1,WATER,ELECTRICITY
+        PHYSICAL=0,FIRE=1,WATER,ELECTRICITY,WIND
     }
     public enum ElementAttackType
     {

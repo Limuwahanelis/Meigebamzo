@@ -305,6 +305,17 @@
                 },
                 {
                     "name": "",
+                    "id": "f40f05a8-967d-44c8-ae0c-e4d27380067e",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "Scale(factor=4)",
+                    "groups": "",
+                    "action": "ElementSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "6fffeb67-1a4e-48e5-887b-bd3e269915e8",
                     "path": "",
                     "interactions": "",

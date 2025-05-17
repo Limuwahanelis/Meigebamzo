@@ -9,7 +9,7 @@ public abstract class ContinousAttack
     public abstract void Attack();
     public abstract void EndAttack();
 
-    public void SetSpells(List<PlayerElementalSpells>spells)
+    public virtual void SetSpells(List<PlayerElementalSpells>spells)
     {
         _spells.AddRange(spells);
     }

@@ -16,6 +16,7 @@ public class FireAttack : ContinousAttack
     private DamageInfo _damageInfo;
     bool _canDealDamage = true;
     ParticleSystem.EmitParams _params;
+    private int _numberOfAdditionalfireElements;
     
     public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,float fireAngle, int attackDamage,float attackCooldown) 
     {
@@ -29,6 +30,11 @@ public class FireAttack : ContinousAttack
         _attackDamage = attackDamage;
         _attackCooldown = attackCooldown;
         _params = new ParticleSystem.EmitParams();
+    }
+    public override void SetSpells(List<PlayerElementalSpells> spells)
+    {
+        base.SetSpells(spells);
+        _numberOfAdditionalfireElements = _spells.FindAll(x => x.Element == Elements.Element.FIRE).Count-1;
     }
     public override void Attack()
     {
@@ -53,12 +59,15 @@ public class FireAttack : ContinousAttack
     {
         _particleSystem.Stop(false, ParticleSystemStopBehavior.StopEmitting);
         _fireTrigger.enabled = false;
+        _numberOfAdditionalfireElements = 0;
         _spells.Clear();
     }
 
     public override void StartAttack()
     {
         _particleSystem.transform.position= _mainBody.transform.position;
+        ParticleSystem.EmissionModule emissionModule = _particleSystem.emission;
+        emissionModule.rateOverTime = 80 + 20 * _numberOfAdditionalfireElements;
         _particleSystem.Play();
         _fireTrigger.enabled = true;
     }
@@ -95,7 +104,7 @@ public class FireAttack : ContinousAttack
         Logger.Log(_spells.Count);
         _damageInfo.element = Elements.Element.FIRE;
         _damageInfo.dmgPosition= _mainBody.transform.position;
-        _damageInfo.dmg = _attackDamage;
+        _damageInfo.dmg = _attackDamage + 5 * _numberOfAdditionalfireElements;
         for(int i=0;i< _damageablesInRange.Count;i++)
         {
             _damageablesInRange[i].TakeDamage(_damageInfo);

@@ -17,7 +17,7 @@ public class FireAttack : ContinousAttack
     bool _canDealDamage = true;
     ParticleSystem.EmitParams _params;
     private int _numberOfAdditionalfireElements;
-    
+    private int _numberOfWindElements;
     public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,float fireAngle, int attackDamage,float attackCooldown) 
     {
         _playerSpells = playerSpells;
@@ -35,6 +35,7 @@ public class FireAttack : ContinousAttack
     {
         base.SetSpells(spells);
         _numberOfAdditionalfireElements = _spells.FindAll(x => x.Element == Elements.Element.FIRE).Count-1;
+        _numberOfWindElements = _spells.FindAll(x => x.Element == Elements.Element.WIND).Count;
     }
     public override void Attack()
     {
@@ -65,6 +66,8 @@ public class FireAttack : ContinousAttack
 
     public override void StartAttack()
     {
+        ParticleSystem.MainModule mainModule= _particleSystem.main;
+        mainModule.startLifetime = 0.8f+0.15f*_numberOfWindElements;
         _particleSystem.transform.position= _mainBody.transform.position;
         ParticleSystem.EmissionModule emissionModule = _particleSystem.emission;
         emissionModule.rateOverTime = 80 + 20 * _numberOfAdditionalfireElements;
@@ -77,7 +80,7 @@ public class FireAttack : ContinousAttack
         List<Vector2> toReturn = new List<Vector2>() { new Vector2(), new Vector2(), new Vector2() };
         Vector2 pointA = _mainBody.transform.position;
         Vector2 mouseDir = (RaycastFromCamera2D.MouseInWorldPos - _mainBody.transform.position).normalized;
-        Vector2 fireForwardPoint = pointA + mouseDir * _fireRange;
+        Vector2 fireForwardPoint = pointA + mouseDir * (_fireRange+_fireRange* 0.15f*_numberOfWindElements);
         Vector2 fireForwardDir = (fireForwardPoint - (Vector2)_mainBody.transform.position);
 
         float mult = fireForwardPoint.magnitude;

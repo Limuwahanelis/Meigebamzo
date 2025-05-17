@@ -19,7 +19,7 @@ public class ElectricityAttack : ContinousAttack
     float _spread;
     float _triggerStartingOffset;
 
-    int _additionalElectricityElements = 0;
+    int _numberOfAdditionalElectricityElements = 0;
 
     bool _canAttackElectricity=true;
     public ElectricityAttack(Transform mainBody, float spread, List<ParticleSystem> particles, List<IDamagable> damageablesInRange, List<float> angles, PlayerSpells playerSpells, ParticleSystem thunderParticlesPrefab,BoxCollider2D electricityTrigger)
@@ -54,7 +54,7 @@ public class ElectricityAttack : ContinousAttack
 
         if (_damageablesInRange.Count == 0)
         {
-            parameters = SetUpThunderParticleParams(direction, 1+0.5f*_additionalElectricityElements/2 -0.125f);
+            parameters = SetUpThunderParticleParams(direction, 1+0.5f*_numberOfAdditionalElectricityElements/2 -0.125f);
         }
         else
         {
@@ -77,7 +77,7 @@ public class ElectricityAttack : ContinousAttack
                 p.Emit(parameters, 1);
                 if (damageable != null)
                 {
-                    damageable.TakeDamage(new DamageInfo(10+3*_additionalElectricityElements, _mainBody.transform.position, _damageElement));
+                    damageable.TakeDamage(new DamageInfo(10+3*_numberOfAdditionalElectricityElements, _mainBody.transform.position, _damageElement));
                 }
             }
             else
@@ -99,6 +99,7 @@ public class ElectricityAttack : ContinousAttack
         offset.y = _triggerStartingOffset;
         _electricityTrigger.size = size;
         _electricityTrigger.offset = offset;
+        _electricityTrigger.enabled = false;
 
         _particlesNewColor = _particlesStandardColor;
 
@@ -109,14 +110,14 @@ public class ElectricityAttack : ContinousAttack
 
     public override void StartAttack()
     {
-        _additionalElectricityElements = _spells.FindAll(x => x.Element == Elements.Element.ELECTRICITY).Count-1;
+        _numberOfAdditionalElectricityElements = _spells.FindAll(x => x.Element == Elements.Element.ELECTRICITY).Count-1;
         Vector2 size = _electricityTrigger.size;
         Vector2 offset = _electricityTrigger.offset;
-        size.y += 0.5f * _additionalElectricityElements;
-        offset.y+=( 0.5f * _additionalElectricityElements)/2;
+        size.y += 0.5f * _numberOfAdditionalElectricityElements;
+        offset.y+=( 0.5f * _numberOfAdditionalElectricityElements)/2;
         _electricityTrigger.size = size;
         _electricityTrigger.offset = offset;
-
+        _electricityTrigger.enabled = true;
         _damageElement = Elements.Element.ELECTRICITY;
 
         _particlesNewColor = _particlesStandardColor;

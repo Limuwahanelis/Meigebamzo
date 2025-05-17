@@ -15,3 +15,4 @@ MonoBehaviour:
   _element: 3
   _attackType: 0
   _sprite: {fileID: 21300000, guid: 017eb09ca0cbf8e45994f2023d193ac0, type: 3}
+  _associatedColor: {r: 0.78431374, g: 0.27058825, b: 0.78039217, a: 1}

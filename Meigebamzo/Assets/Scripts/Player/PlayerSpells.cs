@@ -23,6 +23,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] int _count;
     [SerializeField] float _startLifetime;
     [SerializeField] float _length;
+    [SerializeField] BoxCollider2D _electricityTrigger;
     [SerializeField] List<ParticleSystem> _paritcles= new List<ParticleSystem>();
     [Header("Fire")]
     [SerializeField] float _fireRange;
@@ -46,7 +47,7 @@ public class PlayerSpells : MonoBehaviour
             spriteRenderer.gameObject.SetActive(false);
         }
         _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
-        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab));
+        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab, _electricityTrigger));
     }
     private void Update()
     {
@@ -79,7 +80,7 @@ public class PlayerSpells : MonoBehaviour
 
         if(_selectedElements.Count< _maxNumberOfSelectedElements)
         {
-            Logger.Log(element.ToString());
+            //Logger.Log(element.ToString());
             PlayerElementalSpells spell = _availableElementalSpells.Find(x => x.Element == element);
             _selectedElements.Add(spell);
             _spellSlotsRenderes[_selectedElements.Count - 1].sprite = spell.Sprite;

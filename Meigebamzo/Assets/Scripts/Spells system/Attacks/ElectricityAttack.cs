@@ -5,16 +5,26 @@ using UnityEngine;
 
 public class ElectricityAttack : ContinousAttack
 {
-    private Transform _mainBody;
-    private float _spread;
     List<ParticleSystem> _particles = new List<ParticleSystem>();
-    private List<float> _angles = new List<float>() { 0, 0 };
     PlayerSpells _playerSpells;
     ParticleSystem _thunderParticlesPrefab;
+    BoxCollider2D _electricityTrigger;
+    Transform _mainBody;
+    List<float> _angles = new List<float>() { 0, 0 };
+    Elements.Element _damageElement = Elements.Element.ELECTRICITY;
+    ParticleSystem.MinMaxGradient _particlesStandardColor;
+
+    ParticleSystem.MinMaxGradient _particlesNewColor;
+    float _triggerStartingSize;
+    float _spread;
+    float _triggerStartingOffset;
+
+    int _additionalElectricityElements = 0;
 
     bool _canAttackElectricity=true;
-    public ElectricityAttack(Transform mainBody, float spread, List<ParticleSystem> particles, List<IDamagable> damageablesInRange, List<float> angles, PlayerSpells playerSpells, ParticleSystem thunderParticlesPrefab)
+    public ElectricityAttack(Transform mainBody, float spread, List<ParticleSystem> particles, List<IDamagable> damageablesInRange, List<float> angles, PlayerSpells playerSpells, ParticleSystem thunderParticlesPrefab,BoxCollider2D electricityTrigger)
     {
+
         _mainBody = mainBody;
         _spread = spread;
         _particles = particles;
@@ -22,6 +32,11 @@ public class ElectricityAttack : ContinousAttack
         _angles = angles;
         _playerSpells = playerSpells;
         _thunderParticlesPrefab = thunderParticlesPrefab;
+        _electricityTrigger = electricityTrigger;
+        _triggerStartingSize = electricityTrigger.size.y;
+        _triggerStartingOffset = electricityTrigger.offset.y;
+        _particlesStandardColor = thunderParticlesPrefab.main.startColor;
+        _particlesNewColor = _particlesStandardColor;
     }
 
     public override void Attack()
@@ -39,7 +54,7 @@ public class ElectricityAttack : ContinousAttack
 
         if (_damageablesInRange.Count == 0)
         {
-            parameters = SetUpThunderParticleParams(direction, 1);
+            parameters = SetUpThunderParticleParams(direction, 1+0.5f*_additionalElectricityElements/2 -0.125f);
         }
         else
         {
@@ -62,7 +77,7 @@ public class ElectricityAttack : ContinousAttack
                 p.Emit(parameters, 1);
                 if (damageable != null)
                 {
-                    damageable.TakeDamage(new DamageInfo(10, _mainBody.transform.position, Elements.Element.ELECTRICITY));
+                    damageable.TakeDamage(new DamageInfo(10+3*_additionalElectricityElements, _mainBody.transform.position, _damageElement));
                 }
             }
             else
@@ -77,12 +92,53 @@ public class ElectricityAttack : ContinousAttack
 
     public override void EndAttack()
     {
-       
+        _spells.Clear();
+        Vector2 size = _electricityTrigger.size;
+        Vector2 offset = _electricityTrigger.offset;
+        size.y = _triggerStartingSize;
+        offset.y = _triggerStartingOffset;
+        _electricityTrigger.size = size;
+        _electricityTrigger.offset = offset;
+
+        _particlesNewColor = _particlesStandardColor;
+
+        ParticleSystem.MainModule mainMod = _thunderParticlesPrefab.main;
+        mainMod.startColor = _particlesStandardColor;
+
     }
 
     public override void StartAttack()
     {
+        _additionalElectricityElements = _spells.FindAll(x => x.Element == Elements.Element.ELECTRICITY).Count-1;
+        Vector2 size = _electricityTrigger.size;
+        Vector2 offset = _electricityTrigger.offset;
+        size.y += 0.5f * _additionalElectricityElements;
+        offset.y+=( 0.5f * _additionalElectricityElements)/2;
+        _electricityTrigger.size = size;
+        _electricityTrigger.offset = offset;
+
+        _damageElement = Elements.Element.ELECTRICITY;
+
+        _particlesNewColor = _particlesStandardColor;
         
+        ParticleSystem.MainModule mainMod = _thunderParticlesPrefab.main;
+        mainMod.startColor = _particlesStandardColor;
+
+        if (_spells.Find(x => x.Element == Elements.Element.FIRE))
+        {
+            _damageElement = Elements.Element.FIRE;
+            
+            
+        }
+        _particlesNewColor.color = _spells.Find(x => x.Element == _damageElement).AssociatedColor;
+        mainMod.startColor = _particlesNewColor;
+        foreach (ParticleSystem p in _particles)
+        {
+            mainMod = p.main;
+            mainMod.startColor = _particlesNewColor;
+            
+        }
+
     }
     private IDamagable GetClosestDamageableForThunder()
     {

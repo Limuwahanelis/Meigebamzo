@@ -21,7 +21,7 @@ public class BasicZombieStateIdle : EnemyState
         base.SetUpState(context);
         _context = (BasicZombieContext)context;
         _context.animMan.PlayAnimation("Idle");
-       //_context.coroutineHolder.StartCoroutine( HelperClass.DelayedFunction(1f, () => { StartChasingPlayer(); }));
+       _context.coroutineHolder.StartCoroutine( HelperClass.DelayedFunction(1f, () => { StartChasingPlayer(); }));
     }
     private void StartChasingPlayer()
     {

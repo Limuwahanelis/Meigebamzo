@@ -1,9 +1,6 @@
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class IconRenderer
@@ -70,7 +67,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] float _waterAttackCooldown;
     [Header("Wind")]
     [SerializeField] List<Transform> _windPushTrans= new List<Transform>();
-    [SerializeField] List<GameObject> _windPushes= new List<GameObject>();
+    [SerializeField] List<WindPush> _windPushes= new List<WindPush>();
 
     private int _corIndex = 0;
     private List<float> angles = new List<float>() {0,0 };
@@ -332,6 +329,7 @@ public class PlayerSpells : MonoBehaviour
             _windPushes[windForce].transform.position= _windPushTrans[windForce].transform.position;
             _windPushes[windForce].transform.up = _electricityTrigger.transform.up;
             _windPushes[windForce].transform.Rotate(_windPushes[windForce].transform.forward, 45f);
+            _windPushes[windForce].SetPushForce(windForce + 1);
             _windPushes[windForce].GetComponent<Animator>().SetInteger("PushType",windForce);
             _windPushes[windForce].GetComponent<Animator>().SetTrigger("Push");
             _selectedElements.Clear();

@@ -13,16 +13,24 @@ public class BasicZombieStateChasePlayer : EnemyState
 
     public override void Update()
     {
-        if(Vector2.Distance(_context.enemyTransform.position,_context.playerTransform.position)>_context.distanceToStartChase)
+        if(_context.enemyRigidBody2D.position.x-_context.playerRB.position.x>0) _context.enemyTransform.localScale = new Vector3(-1, 1, 1);
+        else _context.enemyTransform.localScale = new Vector3(1, 1, 1);
+        base.FixedUpdate();
+        if (Vector2.Distance(_context.enemyRigidBody2D.position, _context.playerRB.position) > _context.distanceToStartChase)
         {
-           _context.enemyTransform.position= Vector2.MoveTowards(_context.enemyTransform.position, _context.playerTransform.position, Time.deltaTime * _context.stats.Speed);
+            Logger.Log(Vector2.MoveTowards(_context.enemyRigidBody2D.position, _context.playerTransform.position, Time.fixedDeltaTime * _context.stats.Speed));
+            _context.enemyTransform.position=Vector2.MoveTowards(_context.enemyRigidBody2D.position, _context.playerRB.position, Time.fixedDeltaTime * _context.stats.Speed);
         }
         else
         {
+            _context.enemyRigidBody2D.linearVelocity = Vector2.zero;
             ChangeState(BasicZombieStateAttackingPlayer.StateType);
         }
     }
+    public override void FixedUpdate()
+    {
 
+    }
     public override void SetUpState(EnemyContext context)
     {
         base.SetUpState(context);

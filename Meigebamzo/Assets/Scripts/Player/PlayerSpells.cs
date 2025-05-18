@@ -54,6 +54,14 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] PolygonCollider2D _fireTrigger;
     [SerializeField] int _fireAttackDamage;
     [SerializeField] float _fireAttackCooldown;
+    [Header("Water")]
+    [SerializeField] float _waterRange;
+    [SerializeField] float _waterAngel;
+    [SerializeField] Transform _waterEndTran;
+    [SerializeField] ParticleSystem _waterParticleSystem;
+    [SerializeField] PolygonCollider2D _waterTrigger;
+    [SerializeField] int _waterAttackDamage;
+    [SerializeField] float _waterAttackCooldown;
     [Header("Wind")]
     [SerializeField] List<Transform> _windPushTrans= new List<Transform>();
     [SerializeField] List<GameObject> _windPushes= new List<GameObject>();
@@ -85,6 +93,7 @@ public class PlayerSpells : MonoBehaviour
         }
         _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
         _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab, _electricityTrigger));
+        _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger, _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown));
     }
     private void Update()
     {
@@ -212,7 +221,6 @@ public class PlayerSpells : MonoBehaviour
     private void AdjustIcons()
     {
 
-        // TODO: poprawic
         List<IconRenderer> activeElementsIcon = _iconsRenderers.FindAll(x => x.IconSlot!=null);
         for(int i=0;i<activeElementsIcon.Count;i++)
         {
@@ -263,14 +271,21 @@ public class PlayerSpells : MonoBehaviour
     }
     private Elements.Element DetermineAttack()
     {
-        if(_selectedElements.Find(x=>x.Element==Elements.Element.ELECTRICITY)) return Elements.Element.ELECTRICITY;
-        else if(_selectedElements.Find(x=>x.Element==Elements.Element.FIRE)) return Elements.Element.FIRE;
-        else if (_selectedElements.Find(x=>x.Element==Elements.Element.WIND)) return Elements.Element.WIND;
+        if(_selectedElements.Find(x=>x.Element==Elements.Element.ELECTRICITY)!=null) return Elements.Element.ELECTRICITY;
+        else if(_selectedElements.Find(x=>x.Element==Elements.Element.FIRE) != null) return Elements.Element.FIRE;
+        else if (_selectedElements.Find(x => x.Element == Elements.Element.WATER) != null) return Elements.Element.WATER;
+        else if (_selectedElements.Find(x=>x.Element==Elements.Element.WIND) != null) return Elements.Element.WIND;
         return Elements.Element.PHYSICAL;
     }
     public bool StartAttack()
     {
-        for(int i=0;i<4;i++)
+        for(int i=0;i<_movingSpellIconsCors.Count;i++)
+        {
+            if (_movingSpellIconsCors[i].Cor != null) StopCoroutine(_movingSpellIconsCors[i].Cor);
+
+        }
+        _movingSpellIconsCors.Clear();
+        for (int i=0;i<4;i++)
         {
             _iconsRenderers[i].IconSlot = null;
             _iconsRenderers[i].Spell = _physicalSpell;

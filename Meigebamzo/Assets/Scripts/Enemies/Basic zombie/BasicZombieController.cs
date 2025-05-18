@@ -9,8 +9,9 @@ public class BasicZombieController : EnemyController
     [SerializeField] float _distanceToEndChase;
     [SerializeField] BasicZombieCombat _combat;
     private BasicZombieContext _context;
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         Initialize();
     }
     private void Initialize()

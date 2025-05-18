@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static PlayerHealthSystem;
 
+[RequireComponent(typeof(ElementalAffliction))]
 public class HealthSystem : MonoBehaviour,IDamagable
 {
     public event IDamagable.OnDeathEventHandler OnDeath;
@@ -14,6 +15,8 @@ public class HealthSystem : MonoBehaviour,IDamagable
     public int MaxHP => _maxHP;
 
     public Transform Transform => transform;
+   
+    public ElementalAffliction ElementalAffliction => _elementalAffliction;
 
     [SerializeField] protected Collider2D[] _colliders;
     [SerializeField] protected bool _isInvincible;
@@ -21,6 +24,7 @@ public class HealthSystem : MonoBehaviour,IDamagable
     [SerializeField] protected int _maxHP;
     [SerializeField] protected int _currentHP;
     [SerializeField] float _invincibilityAfterHitDuration;
+    [SerializeField] protected ElementalAffliction _elementalAffliction;
     protected bool _isInvincibleToDamage = false;
 
 
@@ -82,7 +86,10 @@ public class HealthSystem : MonoBehaviour,IDamagable
         yield return new WaitForSeconds(_invincibilityAfterHitDuration);
         _isInvincibleToDamage = false;
     }
-
+    private void Reset()
+    {
+        _elementalAffliction = GetComponent<ElementalAffliction>();
+    }
     #region collisions
     protected void PreventCollisions(Collider2D[] collidersToPreventCollisionsFrom)
     {

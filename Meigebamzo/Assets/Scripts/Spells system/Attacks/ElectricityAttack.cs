@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class ElectricityAttack : ContinousAttack
 {
+    private AllEnemiesList _enemiesList;
+    List<List<ParticleSystem>> _allparticles = new List<List<ParticleSystem>>();
+
     List<ParticleSystem> _particles = new List<ParticleSystem>();
     PlayerSpells _playerSpells;
     ParticleSystem _thunderParticlesPrefab;
@@ -41,6 +44,7 @@ public class ElectricityAttack : ContinousAttack
 
     public override void Attack()
     {
+        Vector2 mouseDirection = RaycastFromCamera2D.MouseInWorldPos
         Vector2 direction = RaycastFromCamera2D.MouseInWorldPos - _mainBody.position;
         direction.Normalize();
         ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams();
@@ -138,6 +142,15 @@ public class ElectricityAttack : ContinousAttack
             mainMod = p.main;
             mainMod.startColor = _particlesNewColor;
             
+        }
+
+        foreach(List<ParticleSystem>pList in _allparticles)
+        {
+            foreach(ParticleSystem p in pList)
+            {
+                mainMod = p.main;
+                mainMod.startColor = _particlesNewColor;
+            }
         }
 
     }

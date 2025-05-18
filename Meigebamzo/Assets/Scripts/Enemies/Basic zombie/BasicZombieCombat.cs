@@ -4,6 +4,6 @@ public class BasicZombieCombat : MonoBehaviour
 {
     public void Attack()
     {
-        Logger.Log("Attak");
+       // Logger.Log("Attak");
     }
 }

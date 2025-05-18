@@ -38,6 +38,8 @@ public class PlayerInputHandler : MonoBehaviour
     }
     protected void OnElementSelect(InputValue inputValue)
     {
+        if (inputValue.Get<float>() == 0) return;
+        //Logger.Log(inputValue.Get<float>());
         _spells.AddElement((Elements.Element)inputValue.Get<float>());
     }
     protected void OnRMB(InputValue inputValue)

@@ -41,5 +41,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 1554541085
+    locked: 0
+  - name: Spells icons
+    uniqueID: 2843338261
+    locked: 0
   m_RenderingLayers:
   - Default

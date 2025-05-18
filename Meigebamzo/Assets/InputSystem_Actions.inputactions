@@ -43,9 +43,9 @@
                 },
                 {
                     "name": "ElementSelect",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "82be8877-7504-4dfd-bfe6-a75abcfc48a2",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -298,6 +298,17 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "Scale(factor=3)",
+                    "groups": "",
+                    "action": "ElementSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f40f05a8-967d-44c8-ae0c-e4d27380067e",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "Scale(factor=4)",
                     "groups": "",
                     "action": "ElementSelect",
                     "isComposite": false,

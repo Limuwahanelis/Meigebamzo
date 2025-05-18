@@ -7,6 +7,7 @@ using UnityEngine;
 
 public abstract class EnemyController : MonoBehaviour
 {
+    public Rigidbody2D EnemyRB => _rb;
     [Header("Debug"), SerializeField] bool _printState;
     public GameObject MainBody => _mainBody;
     [Header("Enemy common"), SerializeField] protected AnimationManager _enemyAnimationManager;
@@ -14,8 +15,16 @@ public abstract class EnemyController : MonoBehaviour
     //[SerializeField] protected EnemyHealthSystem2 _healthSystem;
     [SerializeField] protected Transform _playerTransform;
     [SerializeField] protected GameObject _mainBody;
+    [SerializeField] protected HealthSystem _healthSystem;
+    [SerializeField] protected Rigidbody2D _rb;
+    [SerializeField] protected ElementalAffliction _elementalAffliction;
     protected Dictionary<Type, EnemyState> _enemyStates = new Dictionary<Type, EnemyState>();
     protected EnemyState _currentEnemyState;
+    public virtual void Awake()
+    {
+        _healthSystem.OnHitEvent += OnHit;
+        AllEnemiesList.AddEnemy(_healthSystem);
+    }
 
     public EnemyState GetState(Type state)
     {
@@ -39,5 +48,10 @@ public abstract class EnemyController : MonoBehaviour
     {
         yield return new WaitForNextFrameUnit();
         function();
+    }
+
+    protected void OnHit(DamageInfo info)
+    {
+        if (info.element == Elements.Element.WATER) _elementalAffliction.TrySetElement(Elements.Element.WATER);
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="PlayerElementalSpells")]
 public class PlayerElementalSpells : ScriptableObject
 {
+    public List<Elements.Element> NegatingElements=>_negatingElements;
+    public Color AssociatedColor => _associatedColor;
     public Elements.Element Element =>_element;
     public Elements.ElementAttackType AttackType=>_attackType;
 
@@ -13,4 +15,6 @@ public class PlayerElementalSpells : ScriptableObject
     [SerializeField] Elements.Element _element;
     [SerializeField] Elements.ElementAttackType _attackType;
     [SerializeField] Sprite _sprite;
+    [SerializeField] Color _associatedColor;
+    [SerializeField] List<Elements.Element> _negatingElements;
 }

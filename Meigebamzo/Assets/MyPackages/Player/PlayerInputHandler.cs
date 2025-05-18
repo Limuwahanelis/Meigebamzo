@@ -44,7 +44,7 @@ public class PlayerInputHandler : MonoBehaviour
     }
     protected void OnRMB(InputValue inputValue)
     {
-        //_spells.FireAttack();
+        _inputStack.CurrentCommand = new MoveInputCommand(_player.CurrentPlayerState, _player.MainBody.transform.position);
         if (inputValue.Get<float>() >= 1)
         {
             if(_spells.StartAttack())

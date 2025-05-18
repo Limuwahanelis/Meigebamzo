@@ -25,11 +25,13 @@ public class BasicZombieController : EnemyController
             ChangeEnemyState = ChangeState,
             animMan = _enemyAnimationManager,
             playerTransform = _playerTransform,
-            enemyTransform = transform,
+            enemyTransform = _mainBody.transform,
             stats = _enemyBasicStats,
-            distanceToStartChase = _distanceToStartChase,
-            distanceToEndChase = _distanceToEndChase,
+            distanceToStartChase = _enemyBasicStats.DistanceToStartChase,
+            distanceToEndChase = _enemyBasicStats.DistanceToEndChase,
             combat = _combat,
+            enemyRigidBody2D = _rb,
+            playerRB = _playerRB,
             coroutineHolder = this
         };
 
@@ -38,6 +40,7 @@ public class BasicZombieController : EnemyController
         {
             _enemyStates.Add(state, (EnemyState)Activator.CreateInstance(state, getState));
         }
+        _combat.SetAttackDamage(_enemyBasicStats.Damage);
         //Set Startitng state
         EnemyState newState = GetState(typeof(BasicZombieStateRiseFromDead));
         newState.SetUpState(_context);
@@ -51,5 +54,7 @@ public class BasicZombieController : EnemyController
     private void OnDeath(IDamagable damagable)
     {
         AllEnemiesList.RemoveEnemy(_healthSystem);
+        gameObject.SetActive(false);
+        OnEnemyDied?.Invoke();
     }
 }

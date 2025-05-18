@@ -9,6 +9,7 @@ public class BasicZombieStateAttackingPlayer : EnemyState
     private BasicZombieContext _context;
     private bool _isPerformingAttack;
     private float _attackTime;
+    private bool _shouldDealdamage = true;
     private float _time = 0;
     public BasicZombieStateAttackingPlayer(GetState function) : base(function)
     {
@@ -28,11 +29,15 @@ public class BasicZombieStateAttackingPlayer : EnemyState
             }
         }
         _time += Time.deltaTime;
-        if(_time>=_attackTime)
+        if (_shouldDealdamage && _time >= _context.combat.ZombieAttack.AttackDamageWindowStart)
         {
-            _time = 0;
-            _isPerformingAttack = false;
+            //_time = 0;
+            _shouldDealdamage = false;
             _context.combat.Attack();
+        }
+        else if (_time >= _attackTime)
+        {
+            _isPerformingAttack = false;
             ChangeState(BasicZombieStateIdle.StateType);
         }
     }
@@ -40,6 +45,7 @@ public class BasicZombieStateAttackingPlayer : EnemyState
     public override void SetUpState(EnemyContext context)
     {
         base.SetUpState(context);
+        _shouldDealdamage = true;
         _context = (BasicZombieContext)context;
         _time = 0;
         _isPerformingAttack = true;

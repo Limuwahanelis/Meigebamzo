@@ -1,12 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class EnlargingButton :Selectable,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
 {
     [SerializeField] RectTransform _rectTransform;
@@ -43,13 +39,13 @@ public class EnlargingButton :Selectable,IPointerEnterHandler,IPointerExitHandle
     {
         onClick?.Invoke();
     }
-    protected override void Reset()
-    {
-        base.Reset();
-        transition=Transition.None;
-        RectTransform rectTransform = GetComponent<RectTransform>();
-        if (rectTransform != null) _rectTransform = rectTransform;
-    }
+    //protected override void Reset()
+    //{
+    //    base.Reset();
+    //    transition = Transition.None;
+    //    RectTransform rectTransform = GetComponent<RectTransform>();
+    //    if (rectTransform != null) _rectTransform = rectTransform;
+    //}
     protected override void Start()
     {
         _orignalScale = _rectTransform.localScale;

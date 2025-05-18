@@ -70,4 +70,8 @@ public class ElementalAffliction : MonoBehaviour
         yield return new WaitForSeconds(_standardAfflictionDuration);
         ClearElement();
     }
+    private void Reset()
+    {
+        _iconsManager = FindAnyObjectByType<ElementSpriteIconManager>();
+    }
 }

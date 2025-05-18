@@ -14,13 +14,17 @@ public class PlayerMovingState : PlayerState
     public override void Update()
     {
         PerformInputCommand();
-        if(Vector2.Distance( _context.playerMovement.PlayerRB.position,_context.playerMovement.TargetPosition)>0.01f)
+
+    }
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if (Vector2.Distance(_context.playerMovement.PlayerRB.position, _context.playerMovement.TargetPosition) > 0.01f)
         {
             _context.playerMovement.PlayerRB.MovePosition(Vector2.MoveTowards(_context.playerMovement.PlayerRB.position, _context.playerMovement.TargetPosition, _context.playerMovement.Speed * Time.fixedDeltaTime));
         }
         else ChangeState(PlayerIdleState.StateType);
     }
-
     public override void SetUpState(PlayerContext context)
     {
         base.SetUpState(context);

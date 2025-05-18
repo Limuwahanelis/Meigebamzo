@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Basic zombie
   m_EditorClassIdentifier: 
   _speed: 3
-  _damage: 0
+  _damage: 2
   _maxHP: 0
+  _distanceToStartChase: 1
+  _distanceToEndChase: 0.5

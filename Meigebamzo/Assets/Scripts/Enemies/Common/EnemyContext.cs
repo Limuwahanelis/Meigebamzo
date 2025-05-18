@@ -9,5 +9,7 @@ public abstract class EnemyContext
     public AnimationManager animMan;
     public EnemyBasicStats stats;
     public MonoBehaviour coroutineHolder;
+    public Rigidbody2D enemyRigidBody2D;
+    public Rigidbody2D playerRB;
 
 }

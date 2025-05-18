@@ -14,10 +14,10 @@ TagManager:
   - EnemyDetector
   - Enemy
   - Damageable
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - EnemyCollision
+  - PlayerCollision
+  - WallCollision
   - 
   - 
   - 
@@ -46,6 +46,21 @@ TagManager:
     locked: 0
   - name: Spells icons
     uniqueID: 2843338261
+    locked: 0
+  - name: Dungeon
+    uniqueID: 161488377
+    locked: 0
+  - name: Enemies
+    uniqueID: 4200976761
+    locked: 0
+  - name: Player
+    uniqueID: 309732859
+    locked: 0
+  - name: Attacks
+    uniqueID: 1192288157
+    locked: 0
+  - name: UI
+    uniqueID: 1308800287
     locked: 0
   m_RenderingLayers:
   - Default

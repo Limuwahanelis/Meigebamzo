@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animations:
   - name: Rise from dead
-    duration: 0.5
+    duration: 0.68333334
     speed: 1
     layer: 0
   - name: Idle
-    duration: 0
+    duration: 1.0166667
     speed: 1
     layer: 0
   - name: Attack
-    duration: 0.33333334
+    duration: 1.0166667
     speed: 1
     layer: 0
   animatorController: {fileID: 9100000, guid: 6478df90ec161314898414c000f54778, type: 2}

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.UI;
-
 [CustomEditor(typeof(TabToggleUI))]
 public class TabToggleUIEditor: ToggleEditor
 {
+    
     SerializedProperty _notSelectedGraphic;
     SerializedProperty _selectedGraphic;
     protected override void OnEnable()

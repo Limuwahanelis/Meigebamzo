@@ -8,6 +8,7 @@ using UnityEngine;
 public interface IDamagable
 {
     Transform Transform { get; }
+    Transform MainBody { get; }
     ElementalAffliction ElementalAffliction { get; }
     public delegate void OnDeathEventHandler(IDamagable damagable);
     public event OnDeathEventHandler OnDeath;

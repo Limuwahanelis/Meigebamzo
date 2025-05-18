@@ -20,6 +20,11 @@ public class IconSlot
     public Transform Slot;
     public int Index;
 }
+[System.Serializable]
+public class ParticleListWrapper
+{
+    public List<ParticleSystem> particles = new List<ParticleSystem>();
+}
 public class PlayerSpells : MonoBehaviour
 {
     [SerializeField] List<PlayerElementalSpells> _availableElementalSpells;
@@ -45,6 +50,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] float _length;
     [SerializeField] BoxCollider2D _electricityTrigger;
     [SerializeField] List<ParticleSystem> _paritcles= new List<ParticleSystem>();
+    [SerializeField] List<ParticleListWrapper> _allparticles= new List<ParticleListWrapper>();
     [Header("Fire")]
     [SerializeField] float _fireRange;
     [SerializeField] float _fireAngle;
@@ -92,7 +98,7 @@ public class PlayerSpells : MonoBehaviour
             spriteRenderer.gameObject.SetActive(false);
         }
         _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
-        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab, _electricityTrigger));
+        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab, _electricityTrigger,_allparticles));
         _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger, _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown));
     }
     private void Update()

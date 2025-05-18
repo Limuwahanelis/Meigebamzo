@@ -13,6 +13,7 @@ public class BasicZombieController : EnemyController
     {
         base.Awake();
         Initialize();
+        _healthSystem.OnDeath += OnDeath;
     }
     private void Initialize()
     {
@@ -21,15 +22,15 @@ public class BasicZombieController : EnemyController
 
         _context = new BasicZombieContext
         {
-            ChangeEnemyState=ChangeState,
-            animMan=_enemyAnimationManager,
-            playerTransform=_playerTransform,
-            enemyTransform=transform,
-            stats=_enemyBasicStats,
-            distanceToStartChase=_distanceToStartChase,
-            distanceToEndChase=_distanceToEndChase,
-            combat=_combat,
-            coroutineHolder=this
+            ChangeEnemyState = ChangeState,
+            animMan = _enemyAnimationManager,
+            playerTransform = _playerTransform,
+            enemyTransform = transform,
+            stats = _enemyBasicStats,
+            distanceToStartChase = _distanceToStartChase,
+            distanceToEndChase = _distanceToEndChase,
+            combat = _combat,
+            coroutineHolder = this
         };
 
         EnemyState.GetState getState = GetState;
@@ -45,6 +46,10 @@ public class BasicZombieController : EnemyController
     }
     private void Start()
     {
-        
+
+    }
+    private void OnDeath(IDamagable damagable)
+    {
+        AllEnemiesList.RemoveEnemy(_healthSystem);
     }
 }

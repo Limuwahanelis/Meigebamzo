@@ -3,11 +3,20 @@ using UnityEngine;
 
 public class AllEnemiesList : MonoBehaviour
 {
-    public List<Transform> AllEnemiesTransform => _allEnemiesTransform;
-    private List<Transform> _allEnemiesTransform = new List<Transform>();
+    public static List<IDamagable> AllEnemiesTransform => _allEnemiesTransform;
+    private static List<IDamagable> _allEnemiesTransform = new List<IDamagable>();
 
-    public void AddEnemy(Transform tran)
+    public static void AddEnemy(IDamagable damageable)
     {
-        _allEnemiesTransform.Add(tran);
+        _allEnemiesTransform.Add(damageable);
+    }
+    public static void RemoveEnemy(IDamagable damageable)
+    {
+        _allEnemiesTransform.Remove(damageable);
+    }
+
+    private void OnDestroy()
+    {
+        _allEnemiesTransform.Clear();
     }
 }

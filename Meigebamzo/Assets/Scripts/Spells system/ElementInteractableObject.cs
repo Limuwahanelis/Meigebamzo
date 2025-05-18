@@ -9,6 +9,8 @@ public class ElementInteractableObject : MonoBehaviour, IDamagable
     public Transform Transform => transform;
     public ElementalAffliction ElementalAffliction => _elementalAffliction;
 
+    public Transform MainBody => transform;
+
     public event IDamagable.OnDeathEventHandler OnDeath;
 
     

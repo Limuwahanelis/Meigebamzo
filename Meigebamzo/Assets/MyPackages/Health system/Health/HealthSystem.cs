@@ -18,6 +18,8 @@ public class HealthSystem : MonoBehaviour,IDamagable
    
     public ElementalAffliction ElementalAffliction => _elementalAffliction;
 
+    public Transform MainBody => _mainBody ? _mainBody : transform;
+
     [SerializeField] protected Collider2D[] _colliders;
     [SerializeField] protected bool _isInvincible;
     [SerializeField] protected HealthBar _hpBar;
@@ -25,6 +27,7 @@ public class HealthSystem : MonoBehaviour,IDamagable
     [SerializeField] protected int _currentHP;
     [SerializeField] float _invincibilityAfterHitDuration;
     [SerializeField] protected ElementalAffliction _elementalAffliction;
+    [SerializeField] protected Transform _mainBody;
     protected bool _isInvincibleToDamage = false;
 
 

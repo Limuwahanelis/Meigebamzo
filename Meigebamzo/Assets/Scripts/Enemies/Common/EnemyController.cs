@@ -16,7 +16,6 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField] protected Transform _playerTransform;
     [SerializeField] protected GameObject _mainBody;
     [SerializeField] protected HealthSystem _healthSystem;
-    [SerializeField] protected Transform _playerMainBody;
     [SerializeField] protected Rigidbody2D _rb;
     [SerializeField] protected ElementalAffliction _elementalAffliction;
     protected Dictionary<Type, EnemyState> _enemyStates = new Dictionary<Type, EnemyState>();
@@ -24,6 +23,7 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void Awake()
     {
         _healthSystem.OnHitEvent += OnHit;
+        AllEnemiesList.AddEnemy(_healthSystem);
     }
 
     public EnemyState GetState(Type state)

@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+    public UnityEvent OnPlayerDie;
     public Type aa;
     [Header("Debug"), SerializeField] bool _printState;
     public bool IsAlive => _isAlive;
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
     {
 
         Initalize();
+        _playerHealthSystem.OnDeath += PlayerDead;
     }
     protected void Initalize()
     {
@@ -62,6 +65,10 @@ public class PlayerController : MonoBehaviour
          newState.SetUpState(_context);
          _currentPlayerState = newState;
         Logger.Log(newState.GetType());
+    }
+    private void PlayerDead(IDamagable damagable)
+    {
+        OnPlayerDie?.Invoke();
     }
     public PlayerState GetState(Type state)
     {

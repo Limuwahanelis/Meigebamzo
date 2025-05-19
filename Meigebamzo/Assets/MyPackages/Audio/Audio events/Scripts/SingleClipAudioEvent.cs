@@ -7,9 +7,9 @@ using UnityEngine.Audio;
 public class SingleClipAudioEvent : AudioEvent
 {
     public AudioClip audioClip;
-    [Range(0, 1)]
+    [Range(0, 1),SerializeField]
     private float _volume = 1f;
-    [Range(0, 2)]
+    [Range(0, 2),SerializeField]
     private float _pitch = 1f;
     public override void Play(AudioSource audioSource)
     {
@@ -26,6 +26,10 @@ public class SingleClipAudioEvent : AudioEvent
         audioSource.pitch = _pitch;
         if (!overPlay) return;
         audioSource.Play();
+    }
+    public override void Pause(AudioSource audioSource)
+    {
+        audioSource.Stop();
     }
     public override void Preview(AudioSource audioSource, float masterVol, float multVol)
     {

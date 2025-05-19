@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Audio Event")]
 public class AudioEvent : ScriptableObject
 {
-
-
+    public virtual void SetAudioSource(AudioSource source) { }
+    public virtual void Pause(AudioSource audioSource) { }
     public virtual void Play(AudioSource audioSource) { }
     /// <summary>
     /// Plays sounds but allows for restarting it.

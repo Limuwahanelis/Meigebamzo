@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class LevelManager : MonoBehaviour
 {
+    public UnityEvent OnStartLevel;
     public UnityEvent OnLevelCompleted;
     [SerializeField] int _tasksToComplete;
     [SerializeField] Transform _cameraTran;
@@ -22,11 +23,18 @@ public class LevelManager : MonoBehaviour
             OnLevelCompleted?.Invoke();
         }
     }
+    public void FailTask()
+    {
+        _completedTasks--;
+    }
     public void StartMoveCam()
     {
         StartCoroutine(MoveCam());
     }
-
+    public void StartLevel()
+    {
+        OnStartLevel?.Invoke();
+    }
     private IEnumerator MoveCam()
     {
         Vector3 _cameraStartingPos = _cam.transform.position;
@@ -39,5 +47,6 @@ public class LevelManager : MonoBehaviour
             yield return null;
         }
         Camera.main.transform.position = _cameraTran.position;
+        StartLevel();
     }
 }

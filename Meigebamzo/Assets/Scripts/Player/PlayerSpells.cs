@@ -33,10 +33,13 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] float _spellIconMoveSpeed;
     [SerializeField] ElementSpellsIconDestoryer _spellIconDestoryer;
     [SerializeField] PlayerElementalSpells _physicalSpell;
+    [SerializeField] AudioSource _audioSource;
+    [SerializeField] AudioSource _audioSourceNotLooped;
     private List<PlayerElementalSpells> _selectedElements = new List<PlayerElementalSpells>();
 
     [Header("Electricity")]
     [Tooltip("Spread in degrees"),SerializeField] float _spread=2f;
+    [SerializeField] AudioEvent _electricityAudioEvent;
     [SerializeField] SpritePool _thunderSpritePool;
     [SerializeField] float _thunderDuration=0.1f;
     [SerializeField] float _thunderCooldown = 0.5f;
@@ -49,6 +52,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] List<ParticleSystem> _paritcles= new List<ParticleSystem>();
     [SerializeField] List<ParticleListWrapper> _allparticles= new List<ParticleListWrapper>();
     [Header("Fire")]
+    [SerializeField] AudioEvent _fireAudioEvent;
     [SerializeField] float _fireRange;
     [SerializeField] float _fireAngle;
     [SerializeField] Transform _fireEndTran;
@@ -66,6 +70,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] int _waterAttackDamage;
     [SerializeField] float _waterAttackCooldown;
     [Header("Wind")]
+    [SerializeField] AudioEvent _airAttackAudioEvent;
     [SerializeField] List<Transform> _windPushTrans= new List<Transform>();
     [SerializeField] List<WindPush> _windPushes= new List<WindPush>();
 
@@ -94,8 +99,10 @@ public class PlayerSpells : MonoBehaviour
         {
             spriteRenderer.gameObject.SetActive(false);
         }
-        _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown));
-        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab, _electricityTrigger,_allparticles));
+        _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, 
+            _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown, _fireAudioEvent,_audioSource));
+        _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab,
+            _electricityTrigger,_allparticles, _electricityAudioEvent,_audioSource));
         _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger, _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown));
     }
     private void Update()
@@ -324,6 +331,7 @@ public class PlayerSpells : MonoBehaviour
 
         if(attackElement==Elements.Element.WIND)
         {
+            _airAttackAudioEvent.Play(_audioSourceNotLooped);
             int windForce = _selectedElements.FindAll(x => x.Element == Elements.Element.WIND).Count-1;
 
             _windPushes[windForce].transform.position= _windPushTrans[windForce].transform.position;

@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class AudioEventPlayer : MonoBehaviour
 {
+    
     [SerializeField] AudioSource _audioSource;
     private void Reset()
     {

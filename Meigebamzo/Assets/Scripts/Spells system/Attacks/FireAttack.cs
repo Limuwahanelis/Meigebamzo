@@ -13,12 +13,15 @@ public class FireAttack : ContinousAttack
     float _fireAngle;
     private int _attackDamage;
     private float _attackCooldown;
+    private readonly AudioEvent _fireAttackAudioEvent;
+    private readonly AudioSource _audioSource;
     private DamageInfo _damageInfo;
     bool _canDealDamage = true;
     ParticleSystem.EmitParams _params;
     private int _numberOfAdditionalfireElements;
     private int _numberOfWindElements;
-    public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,float fireAngle, int attackDamage,float attackCooldown) 
+    public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,
+        float fireAngle, int attackDamage,float attackCooldown,AudioEvent fireAttackAudioEvent,AudioSource audioSource) 
     {
         _playerSpells = playerSpells;
         _particleSystem = system;
@@ -29,6 +32,8 @@ public class FireAttack : ContinousAttack
         _fireAngle = fireAngle;
         _attackDamage = attackDamage;
         _attackCooldown = attackCooldown;
+        _fireAttackAudioEvent = fireAttackAudioEvent;
+        _audioSource = audioSource;
         _params = new ParticleSystem.EmitParams();
     }
     public override void SetSpells(List<PlayerElementalSpells> spells)
@@ -58,6 +63,7 @@ public class FireAttack : ContinousAttack
 
     public override void EndAttack()
     {
+        _fireAttackAudioEvent.Pause(_audioSource);
         _particleSystem.Stop(false, ParticleSystemStopBehavior.StopEmitting);
         _fireTrigger.enabled = false;
         _numberOfAdditionalfireElements = 0;
@@ -66,6 +72,7 @@ public class FireAttack : ContinousAttack
 
     public override void StartAttack()
     {
+        _fireAttackAudioEvent.Play(_audioSource);
         ParticleSystem.MainModule mainModule= _particleSystem.main;
         mainModule.startLifetime = 0.8f+0.15f*_numberOfWindElements;
         _particleSystem.transform.position= _mainBody.transform.position;

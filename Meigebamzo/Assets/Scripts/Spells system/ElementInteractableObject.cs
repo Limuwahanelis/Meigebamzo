@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class ElementInteractableObject : MonoBehaviour, IDamagable
 {
-    public UnityEvent OnElementInteracted;
-    [SerializeField] Elements.Element _elementToInteractWith;
+    public UnityEvent<Elements.Element> OnElementInteracted;
+    [SerializeField] List<Elements.Element> _elementsToInteractWith= new List<Elements.Element>();
     [SerializeField] ElementalAffliction _elementalAffliction;
     public Transform Transform => transform;
     public ElementalAffliction ElementalAffliction => _elementalAffliction;
@@ -26,7 +27,7 @@ public class ElementInteractableObject : MonoBehaviour, IDamagable
 
     public void TakeDamage(DamageInfo info)
     {
-        if (info.element == _elementToInteractWith) OnElementInteracted?.Invoke();
+        if (_elementsToInteractWith.Contains(info.element)) OnElementInteracted?.Invoke(info.element);
     }
 
     private void Reset()

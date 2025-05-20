@@ -266,7 +266,7 @@ public class ElectricityAttack : ContinousAttack
         float maxDotProduct = 0;
         for (int i=0;i<3;i++)
         {
-            List<IDamagable> potentialtargets = AllEnemiesList.AllEnemiesTransform.FindAll(x => Vector2.Distance(currMiddlePoint.MainBody.position, x.MainBody.position) < 3f && x!= currMiddlePoint&&!_electricityTargets.Contains(x));
+            List<IDamagable> potentialtargets = AllEnemiesList.AllEnemiesTransform.FindAll(x => Vector2.Distance(currMiddlePoint.MainBody.position, x.MainBody.position) < 5f && x!= currMiddlePoint&&!_electricityTargets.Contains(x));
             if (potentialtargets.Count == 0) return;
             middleToMouseVector = (currMiddlePoint.MainBody.position - RaycastFromCamera2D.MouseInWorldPos).normalized;
             currenClosestTran = potentialtargets[0];

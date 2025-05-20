@@ -69,6 +69,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] PolygonCollider2D _waterTrigger;
     [SerializeField] int _waterAttackDamage;
     [SerializeField] float _waterAttackCooldown;
+    [SerializeField] AudioEvent _waterAttackAudioevent;
     [Header("Wind")]
     [SerializeField] AudioEvent _airAttackAudioEvent;
     [SerializeField] List<Transform> _windPushTrans= new List<Transform>();
@@ -103,7 +104,8 @@ public class PlayerSpells : MonoBehaviour
             _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown, _fireAudioEvent,_audioSource));
         _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab,
             _electricityTrigger,_allparticles, _electricityAudioEvent,_audioSource));
-        _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger, _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown));
+        _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger,
+            _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown, _waterAttackAudioevent,_audioSource));
     }
     private void Update()
     {
@@ -340,6 +342,7 @@ public class PlayerSpells : MonoBehaviour
             _windPushes[windForce].SetPushForce(windForce + 1);
             _windPushes[windForce].GetComponent<Animator>().SetInteger("PushType",windForce);
             _windPushes[windForce].GetComponent<Animator>().SetTrigger("Push");
+            _windPushes[windForce].transform.SetParent(null);
             _selectedElements.Clear();
         }
 
@@ -351,8 +354,10 @@ public class PlayerSpells : MonoBehaviour
     }
     public void EndAttack()
     {
+        if (_cutrrentContinousAttack == null) return;
         _cutrrentContinousAttack.EndAttack();
         RemoveEnemiesFromRange();
+        _cutrrentContinousAttack = null;
     }
   
     List<Vector2> GetTriangle()

@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+#if UNITY_EDITOR
+    [SerializeField] bool _forceLevel;
+    [SerializeField] int _level;
+#endif
     [SerializeField] GameObject toShow;
     [SerializeField] bool _showTutorial;
     [SerializeField] PlayerInputHandler _playerInput;
@@ -27,12 +31,23 @@ public class GameManager : MonoBehaviour
             {
                 _playerInput.SetEnabled(false);
                 toShow.SetActive(true);
+                
             }
             else
             {
                 toShow.SetActive(false);
                 _playerInput.SetEnabled(true);
+                _levelManagers[0].CompleteTask();
+#if UNITY_EDITOR
+                if (_forceLevel)
+                {
+                    _levelManagers[_level-1].StartLevel();
+                    Camera.main.transform.position =new Vector3(0, _levelManagers[_level-1].transform.position.y,-10);
+                }
+#endif
             }
+
+
         }
         else
         {

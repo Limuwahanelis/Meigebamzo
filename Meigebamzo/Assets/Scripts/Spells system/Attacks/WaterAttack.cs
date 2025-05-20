@@ -12,12 +12,14 @@ public class WaterAttack : ContinousAttack
     float _fireAngle;
     private int _attackDamage;
     private float _attackCooldown;
+    private readonly AudioEvent _waterAudioEvent;
+    private readonly AudioSource _auioSource;
     private DamageInfo _damageInfo;
     bool _canDealDamage = true;
     ParticleSystem.EmitParams _params;
     private int _numberOfAdditionalfireElements;
     private int _numberOfWindElements;
-    public WaterAttack(PlayerSpells playerSpells, ParticleSystem system, List<IDamagable> damageables, PolygonCollider2D fireTrigger, Transform mainBody, float fireRange, float fireAngle, int attackDamage, float attackCooldown)
+    public WaterAttack(PlayerSpells playerSpells, ParticleSystem system, List<IDamagable> damageables, PolygonCollider2D fireTrigger, Transform mainBody, float fireRange, float fireAngle, int attackDamage, float attackCooldown,AudioEvent waterAudioEvent,AudioSource auioSource)
     {
         _playerSpells = playerSpells;
         _particleSystem = system;
@@ -28,6 +30,8 @@ public class WaterAttack : ContinousAttack
         _fireAngle = fireAngle;
         _attackDamage = attackDamage;
         _attackCooldown = attackCooldown;
+        _waterAudioEvent = waterAudioEvent;
+        _auioSource = auioSource;
         _params = new ParticleSystem.EmitParams();
     }
     public override void SetSpells(List<PlayerElementalSpells> spells)
@@ -57,6 +61,7 @@ public class WaterAttack : ContinousAttack
 
     public override void EndAttack()
     {
+        _waterAudioEvent.Pause(_auioSource);
         _particleSystem.Stop(false, ParticleSystemStopBehavior.StopEmitting);
         _fireTrigger.enabled = false;
         _numberOfAdditionalfireElements = 0;
@@ -65,6 +70,7 @@ public class WaterAttack : ContinousAttack
 
     public override void StartAttack()
     {
+        _waterAudioEvent.Play(_auioSource);
         ParticleSystem.MainModule mainModule = _particleSystem.main;
         mainModule.startLifetime = 0.8f + 0.15f * _numberOfWindElements;
         _particleSystem.transform.position = _mainBody.transform.position;

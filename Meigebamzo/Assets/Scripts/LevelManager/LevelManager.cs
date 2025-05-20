@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class LevelManager : MonoBehaviour
 {
+    public UnityEvent OnNearDoorEntered;
     public UnityEvent OnStartLevel;
     public UnityEvent OnLevelCompleted;
     [SerializeField] int _tasksToComplete;
@@ -22,6 +23,10 @@ public class LevelManager : MonoBehaviour
         {
             OnLevelCompleted?.Invoke();
         }
+    }
+    public void PlayerNearOpenedGate()
+    {
+        OnNearDoorEntered?.Invoke();
     }
     public void FailTask()
     {

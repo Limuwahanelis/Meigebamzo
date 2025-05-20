@@ -37,9 +37,12 @@ public class ElementalAffliction : MonoBehaviour
             }
             return;
         }
-        _afflictedElementIcon.gameObject.SetActive(true);
+        if (_afflictedElementIcon)
+        {
+            _afflictedElementIcon.gameObject.SetActive(true);
+            _afflictedElementIcon.sprite = _iconsManager.ElementIconSprites[((int)element)];
+        }
         _elementAffectedBy = element;
-        _afflictedElementIcon.sprite = _iconsManager.ElementIconSprites[((int)element)];
         if(_elementalCor!=null)
         {
             StopCoroutine(_elementalCor);
@@ -51,7 +54,7 @@ public class ElementalAffliction : MonoBehaviour
     public void ClearElement()
     {
         _elementAffectedBy = Elements.Element.PHYSICAL;
-        _afflictedElementIcon.gameObject.SetActive(false);
+        if (_afflictedElementIcon) _afflictedElementIcon.gameObject.SetActive(false);
         if (_elementalCor != null)
         {
             StopCoroutine(_elementalCor);

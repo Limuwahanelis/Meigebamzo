@@ -38,9 +38,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Ground
     uniqueID: 1554541085
     locked: 0
@@ -49,6 +46,9 @@ TagManager:
     locked: 0
   - name: Dungeon
     uniqueID: 161488377
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
   - name: Enemies
     uniqueID: 4200976761

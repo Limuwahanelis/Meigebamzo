@@ -26,6 +26,8 @@ public abstract class EnemyController : MonoBehaviour
     public virtual void Awake()
     {
         _healthSystem.OnHitEvent += OnHit;
+        if (_playerRB == null) _playerRB = FindFirstObjectByType<PlayerController>().PlayerRB;
+        if (_playerTransform == null) _playerTransform = FindFirstObjectByType<PlayerController>().MainBody.transform;
         AllEnemiesList.AddEnemy(_healthSystem);
     }
 

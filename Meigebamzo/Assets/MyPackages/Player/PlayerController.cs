@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+    public UnityEvent OnPlayerDie;
     public Type aa;
     [Header("Debug"), SerializeField] bool _printState;
     public bool IsAlive => _isAlive;
     public PlayerState CurrentPlayerState => _currentPlayerState;
     public GameObject MainBody => _mainBody;
+
+    public Rigidbody2D PlayerRB => _playerMovement.PlayerRB;
     [Header("Player"), SerializeField] Animator _anim;
     [SerializeField] GameObject _mainBody;
     [SerializeField] AnimationManager _playerAnimationManager;
@@ -22,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject _gameOverPanel;
     [SerializeField] AudioEvent _event;
     [SerializeField] AudioEventPlayer _player;
+    [SerializeField] PlayerSpells _spells;
     private PlayerState _currentPlayerState;
     private PlayerContext _context;
     private Dictionary<Type, PlayerState> playerStates = new Dictionary<Type, PlayerState>();
@@ -31,6 +36,7 @@ public class PlayerController : MonoBehaviour
     {
 
         Initalize();
+        _playerHealthSystem.OnDeath += PlayerDead;
     }
     protected void Initalize()
     {
@@ -62,6 +68,11 @@ public class PlayerController : MonoBehaviour
          newState.SetUpState(_context);
          _currentPlayerState = newState;
         Logger.Log(newState.GetType());
+    }
+    private void PlayerDead(IDamagable damagable)
+    {
+        _spells.EndAttack();
+        OnPlayerDie?.Invoke();
     }
     public PlayerState GetState(Type state)
     {

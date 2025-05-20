@@ -1,0 +1,9 @@
+sprites:
+cainos
+tiny swords
+
+sounds:
+https://pixabay.com/sound-effects/electric-shock-97989/
+nox essentails
+https://opengameart.org/content/rpg-sound-pack
+https://opengameart.org/content/theme-of-agrual

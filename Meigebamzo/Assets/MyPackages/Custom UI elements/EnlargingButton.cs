@@ -39,13 +39,15 @@ public class EnlargingButton :Selectable,IPointerEnterHandler,IPointerExitHandle
     {
         onClick?.Invoke();
     }
-    //protected override void Reset()
-    //{
-    //    base.Reset();
-    //    transition = Transition.None;
-    //    RectTransform rectTransform = GetComponent<RectTransform>();
-    //    if (rectTransform != null) _rectTransform = rectTransform;
-    //}
+#if UNITY_EDITOR
+    protected override void Reset()
+    {
+        base.Reset();
+        transition = Transition.None;
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        if (rectTransform != null) _rectTransform = rectTransform;
+    }
+#endif
     protected override void Start()
     {
         _orignalScale = _rectTransform.localScale;

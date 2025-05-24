@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class AudioSettingsData
 {
-    public int masterVolume;
-    public int BGMVolume;
-    public int sfxVolume;
+    public List<AudioSChannelSetting> ChannelsData = new List<AudioSChannelSetting>(); 
 
-    public AudioSettingsData(int masterVolume, int bgmVolume,int sfxVolume)
+    public AudioSettingsData(List<AudioChannel> audioChannels)
     {
-        this.masterVolume = masterVolume;
-        this.BGMVolume = bgmVolume;
-        this.sfxVolume = sfxVolume;
+        for(int i=0;i< audioChannels.Count;i++)
+        {
+            ChannelsData.Add(new AudioSChannelSetting()
+            {
+                channel = audioChannels[i].ChannelNum,
+                value = audioChannels[i].Value,
+            });
+        }
     }
+
+
+}
+
+public class AudioSChannelSetting
+{
+    public int value;
+    public int channel;
 }

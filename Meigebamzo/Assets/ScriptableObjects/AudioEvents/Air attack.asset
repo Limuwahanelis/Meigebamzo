@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 944e13fc490b4e34ca5dbbd9f1b812ab, type: 3}
   m_Name: Air attack
   m_EditorClassIdentifier: 
+  _audioChannel: {fileID: 11400000, guid: 191e338bcd9c88c4f8815cdd3c3bbfc1, type: 2}
+  _masterAudioChannel: {fileID: 11400000, guid: c38dd6e25aac7714ab2f9a44e15cbd45, type: 2}
   audioClip: {fileID: 8300000, guid: f30962ae5412b2248878d536ab6791d5, type: 3}
   _volume: 0.894
   _pitch: 0.86

@@ -1,34 +1,20 @@
 using System;
+using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine;
 
-public static class AudioVolumes
+public class AudioVolumes
 {
-    public static Action<int> OnMasterVolumeChanged;
-    public static Action<int> OnBGMVolumeChanged;
-    public static Action<int> OnSFXVolumeChanged;
-    public static int Master => _master;
-    public static int BGM => _BGM;
-    public static int SFX => _sfx;
+    public static List<AudioChannel> AudioChannels => _audioChannels;
 
-    private static int _master=50;
-    private static int _BGM=50;
-    private static int _sfx=50;
+    [SerializeField] List<AudioChannel> _audioChannelsReferences = new List<AudioChannel>();
+
+    private static List<AudioChannel> _audioChannels;
 
 
-    public static void SetMasterVolume(int volume)
+    private void Awake()
     {
-        _master = math.clamp(volume, 0, 100);
-        OnMasterVolumeChanged?.Invoke(volume);
+        _audioChannels = _audioChannelsReferences;
+        _audioChannels.Sort((c1, c2) => c1.ChannelNum.CompareTo(c2.ChannelNum));
     }
-    public static void SetBGMVolume(int volume)
-    {
-        _BGM = math.clamp(volume, 0, 100);
-        OnBGMVolumeChanged?.Invoke(volume);
-    }
-    public static void SetSFXVolume(int volume)
-    {
-        _sfx = math.clamp(volume, 0, 100);
-        OnSFXVolumeChanged?.Invoke(volume);
-    }
-
 }

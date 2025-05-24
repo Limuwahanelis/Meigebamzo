@@ -8,7 +8,7 @@ public class AudioSettingsSaver : MonoBehaviour
     public static readonly string audioSettingsFileName = "audioConfigs";
     public void SaveAudioSettings()
     {
-        AudioSettingsData audioData = new AudioSettingsData(AudioVolumes.Master,AudioVolumes.BGM,AudioVolumes.SFX);
+        AudioSettingsData audioData = new AudioSettingsData(AudioVolumes.AudioChannels);
         JsonSave.SaveToFile(audioData, audioSettingsFileName);
     }
     public static AudioSettingsData LoadAudioSettings()

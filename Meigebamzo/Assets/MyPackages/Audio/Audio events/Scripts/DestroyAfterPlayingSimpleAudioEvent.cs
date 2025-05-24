@@ -13,7 +13,8 @@ public class DestroyAfterPlayingSimpleAudioEvent : AudioEvent
     public override void Play(AudioSource audioSource)
     {
         audioSource.clip = audioClip;
-        audioSource.volume = _volume * (AudioVolumes.Master / 100.0f) * (AudioVolumes.SFX / 100.0f);
+        audioSource.volume = _volume * (AudioVolumes.AudioChannels != null ? AudioVolumes.AudioChannels[_masterAudioChannel.ChannelNum].Value : _masterAudioChannel.Value) / 100.0f
+            * (AudioVolumes.AudioChannels != null ? AudioVolumes.AudioChannels[_audioChannel.ChannelNum].Value : _audioChannel.Value) / 100.0f;
         audioSource.pitch = _pitch;
         if (audioSource.isPlaying) return;
         audioSource.Play();
@@ -21,10 +22,14 @@ public class DestroyAfterPlayingSimpleAudioEvent : AudioEvent
     public override void Preview(AudioSource audioSource, float masterVol, float multVol)
     {
         audioSource.clip = audioClip;
-        audioSource.volume = _volume * (masterVol / 100.0f) * (multVol / 100.0f);
+        audioSource.volume = _volume * (_masterAudioChannel.Value / 100.0f) * (_audioChannel.Value / 100.0f);
         audioSource.pitch = _pitch;
         if (audioSource.isPlaying) return;
         audioSource.Play();
     }
-
+    protected override void Reset()
+    {
+        base.Reset();
+        _audioChannel = Resources.Load<AudioChannel>("SFX");
+    }
 }

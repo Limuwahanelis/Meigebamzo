@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class AudioVolumes
+public class AudioVolumes:MonoBehaviour
 {
     public static List<AudioChannel> AudioChannels => _audioChannels;
 

@@ -80,7 +80,7 @@ public class PlayerSpells : MonoBehaviour
     private bool _canAttackElectricity = true;
     private ContinousAttack _cutrrentContinousAttack;
     private List<Vector2> _fireTriangle;
-    private List<CoroutineWrapper> _movingSpellIconsCors= new List<CoroutineWrapper>();
+    private List<SpellCoroutineWrapper> _movingSpellIconsCors= new List<SpellCoroutineWrapper>();
     private List<IconRenderer> _iconsRenderers = new List<IconRenderer>();
     private List<IconSlot> _iconsSlots = new List<IconSlot>();
     bool _removeOldCorutines = true;
@@ -149,7 +149,7 @@ public class PlayerSpells : MonoBehaviour
                 if (negatingIcon != null)
                 {
                     IconSlot negatingSlot = negatingIcon.IconSlot;
-                    CoroutineWrapper cor = _movingSpellIconsCors.Find(x => x.Icon.Spell.NegatingElements.Contains( element));
+                    SpellCoroutineWrapper cor = _movingSpellIconsCors.Find(x => x.Icon.Spell.NegatingElements.Contains( element));
                     if(cor!=null )
                     {
                         if( cor.Cor != null) StopCoroutine(cor.Cor);
@@ -177,7 +177,7 @@ public class PlayerSpells : MonoBehaviour
             iconRenderer.Spell = spell;
             iconRenderer.IconSlot.AssignedIconRenderer = iconRenderer;
             iconRenderer.SpriteRenderer.gameObject.SetActive(true);
-            CoroutineWrapper newCor = new CoroutineWrapper();
+            SpellCoroutineWrapper newCor = new SpellCoroutineWrapper();
             newCor.Cor = StartCoroutine(MoveSpellIconToSlot(iconRenderer, _corIndex, 0, iconRenderer.Index, false));
             newCor.index = _corIndex;
             newCor.Icon = iconRenderer;
@@ -242,7 +242,7 @@ public class PlayerSpells : MonoBehaviour
             activeElementsIcon[i].IconSlot.Spell = activeElementsIcon[i].Spell;
             if(_movingSpellIconsCors.Find(x=>x.Icon== activeElementsIcon[i])==null)
             {
-                CoroutineWrapper cor = new CoroutineWrapper();
+                SpellCoroutineWrapper cor = new SpellCoroutineWrapper();
                 cor.index = _corIndex;
                 cor.Cor = StartCoroutine(MoveSpellIconToSlot(activeElementsIcon[i], _corIndex, 0, activeElementsIcon[i].Index, false));
                 cor.Icon = activeElementsIcon[i];

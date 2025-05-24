@@ -16,4 +16,4 @@ MonoBehaviour:
   _attackType: 0
   _sprite: {fileID: 21300000, guid: da2b444d8a707dd47a5f5fb0304e8a18, type: 3}
   _associatedColor: {r: 0.78431374, g: 0.27058825, b: 0.78039217, a: 1}
-  _negatingElements: 04000000
+  _negatingElements: 0400000002000000

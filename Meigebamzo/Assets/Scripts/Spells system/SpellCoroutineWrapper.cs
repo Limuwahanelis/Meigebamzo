@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CoroutineWrapper
+public class SpellCoroutineWrapper
 {
     public int index;
     public Coroutine Cor;

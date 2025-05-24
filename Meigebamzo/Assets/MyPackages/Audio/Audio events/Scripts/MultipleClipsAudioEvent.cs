@@ -14,12 +14,19 @@ public class MultipleClipsAudioEvent : AudioEvent
     public override void Play(AudioSource audioSource)
     {
         audioSource.clip = audioclips[Random.Range(0, audioclips.Length)];
-        audioSource.volume = _volume*(AudioVolumes.Master / 100.0f) * (AudioVolumes.SFX / 100.0f);
+        audioSource.volume = _volume * (AudioVolumes.AudioChannels != null ? AudioVolumes.AudioChannels[_masterAudioChannel.ChannelNum].Value : _masterAudioChannel.Value) / 100.0f
+            * (AudioVolumes.AudioChannels != null ? AudioVolumes.AudioChannels[_audioChannel.ChannelNum].Value : _audioChannel.Value) / 100.0f;
         if (audioSource.isPlaying)
         {
             if(!canOverride) return;
         }
             
         audioSource.Play();
+    }
+
+    protected override void Reset()
+    {
+        base.Reset();
+        _audioChannel = Resources.Load<AudioChannel>("SFX");
     }
 }

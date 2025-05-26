@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class IconRenderer
@@ -56,7 +57,6 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] float _fireRange;
     [SerializeField] float _fireAngle;
     [SerializeField] Transform _fireEndTran;
-    [SerializeField] Transform _testTran;
     [SerializeField] ParticleSystem _fireParticleSystem;
     [SerializeField] PolygonCollider2D _fireTrigger;
     [SerializeField] int _fireAttackDamage;
@@ -64,7 +64,6 @@ public class PlayerSpells : MonoBehaviour
     [Header("Water")]
     [SerializeField] float _waterRange;
     [SerializeField] float _waterAngel;
-    [SerializeField] Transform _waterEndTran;
     [SerializeField] ParticleSystem _waterParticleSystem;
     [SerializeField] PolygonCollider2D _waterTrigger;
     [SerializeField] int _waterAttackDamage;
@@ -362,28 +361,37 @@ public class PlayerSpells : MonoBehaviour
   
     List<Vector2> GetTriangle()
     {
-        _fireEndTran.position=_mainBody.transform.position;
+        //_fireEndTran.position=_mainBody.transform.position;
         List<Vector2> toReturn = new List<Vector2>() {new Vector2(),new Vector2(),new Vector2() };
         Vector2 pointA = _mainBody.transform.position;
         Vector2 mouseDir= (RaycastFromCamera2D.MouseInWorldPos- _mainBody.transform.position).normalized;
-        Vector2 fireForwardPoint=pointA+mouseDir*_fireRange;
+        //Vector2 fireForwardPoint=pointA+mouseDir*_fireRange;
+        Vector2 fireForwardPoint = pointA + (Vector2)transform.up * _fireRange;
         Vector2 fireForwardDir = (fireForwardPoint- (Vector2)_mainBody.transform.position);
 
+        float angle = Vector2.SignedAngle(transform.up, mouseDir);
         float mult=fireForwardPoint.magnitude;
-        _fireEndTran.up = fireForwardDir.normalized;
+        //_fireEndTran.up = fireForwardDir.normalized;
 
-        Quaternion rot= Quaternion.AngleAxis(_fireAngle / 2, Vector3.forward);
-        Vector2 ABdir = rot * fireForwardDir;
+        Vector2 pointB = new Vector2(fireForwardPoint.x-_fireRange / math.tan(_fireAngle * math.PI / 180), fireForwardPoint.y);
+        Vector2 pointC = new Vector2(fireForwardPoint.x + _fireRange / math.tan(_fireAngle * math.PI / 180), fireForwardPoint.y);
+        Vector2 ABdir = pointB - pointA;
+        Vector2 ACdir = pointC - pointA;
+        Quaternion rot= Quaternion.AngleAxis(angle, Vector3.forward);
+        pointB = rot* ABdir;
+        rot = Quaternion.AngleAxis(angle, Vector3.forward);
+        pointC = rot* ACdir;
+
 
         float aFunParam = ABdir.y / ABdir.x;
 
         rot = Quaternion.AngleAxis(-_fireAngle / 2, Vector3.forward);
-        Vector2 ACdir = rot * fireForwardDir ;
+        //Vector2 ACdir = rot * fireForwardDir ;
 
-        toReturn[0]=pointA+ABdir;
+        toReturn[0]=pointA+ pointB;
         toReturn[1] = pointA;
-        toReturn[2] = pointA+ACdir;
-        _fireEndTran.position = fireForwardPoint;
+        toReturn[2] = pointA + pointC;
+      //  _fireEndTran.position = fireForwardPoint;
         
 
         return toReturn;

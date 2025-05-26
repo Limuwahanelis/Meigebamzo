@@ -48,7 +48,7 @@ MonoBehaviour:
   _attackRange: 0.54
   attacklayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2048
   _attack: {fileID: 11400000, guid: 6fd41d0403f080b40bf88cbd8629748c, type: 2}
 --- !u!1 &214852705133540310
 GameObject:

@@ -48,7 +48,7 @@ MonoBehaviour:
   _attackRange: 0.54
   attacklayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2048
   _attack: {fileID: 11400000, guid: 6fd41d0403f080b40bf88cbd8629748c, type: 2}
 --- !u!1 &214852705133540310
 GameObject:
@@ -356,7 +356,7 @@ Transform:
   m_GameObject: {fileID: 4414229783165724323}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

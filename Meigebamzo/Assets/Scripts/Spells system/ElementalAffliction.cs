@@ -14,22 +14,26 @@ public class ElementalAffliction : MonoBehaviour
     [SerializeField] SpriteRenderer _afflictedElementIcon;
     [SerializeField] ElementSpriteIconManager _iconsManager;
     [SerializeField] float _standardAfflictionDuration=5f;
+    [SerializeField] float _negatedAfflictionDuration=1f;
 
     private Elements.Element _elementAffectedBy;
     private bool _canFireEvent = true;
     public UnityEvent<Elements.Element> OnAfflictedByElement;
-    private Coroutine _elementalCor; 
+    private Coroutine _elementalCor;
     private void Start()
     {
-        if(_iconsManager==null) GameObject.FindAnyObjectByType<ElementSpriteIconManager>();
+        if(_iconsManager==null) _iconsManager= GameObject.FindAnyObjectByType<ElementSpriteIconManager>();
     }
 
-    public void TrySetElement(Elements.Element element)
+    public void TrySetElement(BasicElement basicElement)
     {
-        if (_elementsImmuneTo.Contains(element)) return;
-        else if(element==_elementAffectedBy)
+        if (_elementsImmuneTo.Contains(basicElement.Element)) return;
+        if (basicElement.Element == Elements.Element.ELECTRICITY) return;
+        if (basicElement.Element == Elements.Element.WIND) return;
+        if (basicElement.Element == Elements.Element.PHYSICAL) return;
+        else if (basicElement.Element == _elementAffectedBy)
         {
-           if(_canFireEvent) OnAfflictedByElement?.Invoke(element);
+            if (_canFireEvent) OnAfflictedByElement?.Invoke(basicElement.Element);
             if (_elementalCor != null)
             {
                 StopCoroutine(_elementalCor);
@@ -39,22 +43,22 @@ public class ElementalAffliction : MonoBehaviour
         }
         if (_afflictedElementIcon)
         {
-            _afflictedElementIcon.gameObject.SetActive(true);
-            _afflictedElementIcon.sprite = _iconsManager.ElementIconSprites[((int)element)];
+            _afflictedElementIcon.enabled = true;
+            _afflictedElementIcon.sprite = _iconsManager.ElementIconSprites[((int)basicElement.Element)];
         }
-        _elementAffectedBy = element;
+        _elementAffectedBy = basicElement.Element;
         if(_elementalCor!=null)
         {
             StopCoroutine(_elementalCor);
             _elementalCor = StartCoroutine(AfflictionCor());
         }
         else _elementalCor = StartCoroutine(AfflictionCor());
-        if (_canFireEvent) OnAfflictedByElement?.Invoke(element);
+        if (_canFireEvent) OnAfflictedByElement?.Invoke(basicElement.Element);
     }
     public void ClearElement()
     {
         _elementAffectedBy = Elements.Element.PHYSICAL;
-        if (_afflictedElementIcon) _afflictedElementIcon.gameObject.SetActive(false);
+        if (_afflictedElementIcon) _afflictedElementIcon.enabled = false;
         if (_elementalCor != null)
         {
             StopCoroutine(_elementalCor);

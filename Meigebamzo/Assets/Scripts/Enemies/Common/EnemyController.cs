@@ -61,6 +61,7 @@ public abstract class EnemyController : MonoBehaviour
 
     protected void OnHit(DamageInfo info)
     {
-        if (info.element == Elements.Element.WATER) _elementalAffliction.TrySetElement(Elements.Element.WATER);
+         _elementalAffliction.TrySetElement(info.basicElement);
+
     }
 }

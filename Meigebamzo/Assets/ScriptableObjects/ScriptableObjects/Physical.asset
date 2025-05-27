@@ -12,8 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b11427ef3c93c64abc0c399c9bc197b, type: 3}
   m_Name: Physical
   m_EditorClassIdentifier: 
-  _element: 0
+  _basicElement: {fileID: 11400000, guid: b9e53bd0c4ce0974f9b102e775992599, type: 2}
   _attackType: 1
-  _sprite: {fileID: 0}
-  _associatedColor: {r: 0, g: 0, b: 0, a: 0}
-  _negatingElements: 

@@ -5,16 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="PlayerElementalSpells")]
 public class PlayerElementalSpells : ScriptableObject
 {
-    public List<Elements.Element> NegatingElements=>_negatingElements;
-    public Color AssociatedColor => _associatedColor;
-    public Elements.Element Element =>_element;
+    public BasicElement BasicElement => _basicElement;
     public Elements.ElementAttackType AttackType=>_attackType;
 
-    public Sprite Sprite => _sprite;
-
-    [SerializeField] Elements.Element _element;
+    [SerializeField] BasicElement _basicElement;
     [SerializeField] Elements.ElementAttackType _attackType;
-    [SerializeField] Sprite _sprite;
-    [SerializeField] Color _associatedColor;
-    [SerializeField] List<Elements.Element> _negatingElements;
+
+
 }

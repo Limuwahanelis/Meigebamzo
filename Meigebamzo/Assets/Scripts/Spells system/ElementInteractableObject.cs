@@ -27,7 +27,7 @@ public class ElementInteractableObject : MonoBehaviour, IDamagable
 
     public void TakeDamage(DamageInfo info)
     {
-        if (_elementsToInteractWith.Contains(info.element)) OnElementInteracted?.Invoke(info.element);
+        if (_elementsToInteractWith.Contains(info.basicElement.Element)) OnElementInteracted?.Invoke(info.basicElement.Element);
     }
 
     private void Reset()

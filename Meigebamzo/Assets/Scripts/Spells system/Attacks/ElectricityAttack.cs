@@ -15,7 +15,7 @@ public class ElectricityAttack : ContinousAttack
     BoxCollider2D _electricityTrigger;
     Transform _mainBody;
     List<float> _angles = new List<float>() { 0, 0 };
-    Elements.Element _damageElement = Elements.Element.ELECTRICITY;
+    //Elements.Element _damageElement = Elements.Element.ELECTRICITY;
     ParticleSystem.MinMaxGradient _particlesStandardColor;
     AudioEvent _audioEvent;
     AudioSource _audioSource;
@@ -48,7 +48,11 @@ public class ElectricityAttack : ContinousAttack
         _audioEvent = audioEvent;
         _audioSource = audioSource;
     }
-
+    public override void SetSpells(List<PlayerElementalSpells> spells)
+    {
+        base.SetSpells(spells);
+        _basicElement = _spells.Find(x => x.BasicElement.Element == Elements.Element.ELECTRICITY).BasicElement;
+    }
     public override void Attack()
     {
         _electricityTargets.Clear();
@@ -112,7 +116,7 @@ public class ElectricityAttack : ContinousAttack
                         damageable = _electricityTargets[i];
                         if (damageable != null)
                         {
-                            damageable.TakeDamage(new DamageInfo(10 + 3 * _numberOfAdditionalElectricityElements, _mainBody.transform.position, _damageElement));
+                            damageable.TakeDamage(new DamageInfo(10 + 3 * _numberOfAdditionalElectricityElements, _mainBody.transform.position, _basicElement));
                         }
                     }
                     currMiddlePoint = _electricityTargets[i].MainBody;
@@ -217,7 +221,7 @@ public class ElectricityAttack : ContinousAttack
     public override void StartAttack()
     {
         _audioEvent.Play(_audioSource);
-        _numberOfAdditionalElectricityElements = _spells.FindAll(x => x.Element == Elements.Element.ELECTRICITY).Count-1;
+        _numberOfAdditionalElectricityElements = _spells.FindAll(x => x.BasicElement.Element == Elements.Element.ELECTRICITY).Count-1;
         Vector2 size = _electricityTrigger.size;
         Vector2 offset = _electricityTrigger.offset;
         size.y += 0.5f * _numberOfAdditionalElectricityElements;
@@ -225,20 +229,20 @@ public class ElectricityAttack : ContinousAttack
         _electricityTrigger.size = size;
         _electricityTrigger.offset = offset;
         _electricityTrigger.enabled = true;
-        _damageElement = Elements.Element.ELECTRICITY;
+        Elements.Element damageElement = _basicElement.Element;
 
         _particlesNewColor = _particlesStandardColor;
         
         ParticleSystem.MainModule mainMod = _thunderParticlesPrefab.main;
         mainMod.startColor = _particlesStandardColor;
 
-        if (_spells.Find(x => x.Element == Elements.Element.FIRE))
+        if (_spells.Find(x => x.BasicElement.Element == Elements.Element.FIRE))
         {
-            _damageElement = Elements.Element.FIRE;
+            damageElement = Elements.Element.FIRE;
             
             
         }
-        _particlesNewColor.color = _spells.Find(x => x.Element == _damageElement).AssociatedColor;
+        _particlesNewColor.color = _spells.Find(x => x.BasicElement.Element == damageElement).BasicElement.AssociatedColor;
         mainMod.startColor = _particlesNewColor;
         foreach (ParticleSystem p in _particles)
         {

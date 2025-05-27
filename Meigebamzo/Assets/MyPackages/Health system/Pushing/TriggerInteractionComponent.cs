@@ -16,7 +16,7 @@ public class TriggerInteractionComponent : MonoBehaviour
     private void Start()
     {
         _pushInfo = new PushInfo( transform.position,new Collider2D[] { _col });
-        _damageInfo = new DamageInfo(damage,transform.position,Elements.Element.PHYSICAL,new Collider2D[] { _col });
+        _damageInfo = new DamageInfo(damage,transform.position,GlobalBasicElements.PhysicalElement,new Collider2D[] { _col });
     }
     private void OnTriggerStay2D(Collider2D collision)
     {

@@ -19,7 +19,7 @@ public class BasicZombieCombat : MonoBehaviour
     }
     public void Attack()
     {
-        _damageInfo = new DamageInfo(_damage, transform.position, Elements.Element.PHYSICAL);
+        _damageInfo = new DamageInfo(_damage, transform.position, GlobalBasicElements.PhysicalElement);
         hitObjects= Physics2D.OverlapCircleAll(_attackTran.position, _attackRange, attacklayer).ToList();
         foreach(Collider2D col in hitObjects)
         {

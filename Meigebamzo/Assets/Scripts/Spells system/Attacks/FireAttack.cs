@@ -39,8 +39,9 @@ public class FireAttack : ContinousAttack
     public override void SetSpells(List<PlayerElementalSpells> spells)
     {
         base.SetSpells(spells);
-        _numberOfAdditionalfireElements = _spells.FindAll(x => x.Element == Elements.Element.FIRE).Count-1;
-        _numberOfWindElements = _spells.FindAll(x => x.Element == Elements.Element.WIND).Count;
+        _numberOfAdditionalfireElements = _spells.FindAll(x => x.BasicElement.Element == Elements.Element.FIRE).Count-1;
+        _numberOfWindElements = _spells.FindAll(x => x.BasicElement.Element == Elements.Element.WIND).Count;
+        _basicElement = _spells.Find(x => x.BasicElement.Element == Elements.Element.FIRE).BasicElement;
     }
     public override void Attack()
     {
@@ -112,7 +113,7 @@ public class FireAttack : ContinousAttack
     {
         if(!_canDealDamage) yield break;
         Logger.Log(_spells.Count);
-        _damageInfo.element = Elements.Element.FIRE;
+        _damageInfo.basicElement = _basicElement;
         _damageInfo.dmgPosition= _mainBody.transform.position;
         _damageInfo.dmg = _attackDamage + 5 * _numberOfAdditionalfireElements;
         for(int i=0;i< _damageablesInRange.Count;i++)

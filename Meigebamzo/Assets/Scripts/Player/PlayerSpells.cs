@@ -123,7 +123,7 @@ public class PlayerSpells : MonoBehaviour
         enemy.GetComponent<IDamagable>().OnDeath -= OnEnemyDied;
         Logger.Log("Removed");
     }
-    private void OnEnemyDied(IDamagable damagable)
+    private void OnEnemyDied(IDamagable damagable, DamageInfo info)
     {
         damagable.OnDeath -= OnEnemyDied;
         _damageablesInRange.Remove(damagable);
@@ -139,16 +139,16 @@ public class PlayerSpells : MonoBehaviour
         {
             //Logger.Log(element.ToString());
             bool destroyIcons = false;
-            PlayerElementalSpells spell = _availableElementalSpells.Find(x => x.Element == element);
+            PlayerElementalSpells spell = _availableElementalSpells.Find(x => x.BasicElement.Element == element);
             _selectedElements.Add(spell);
 
             if(_selectedElements.Count>1)
             {
-                IconRenderer negatingIcon = _iconsRenderers.Find(x => x.Spell.NegatingElements.Contains(element));
+                IconRenderer negatingIcon = _iconsRenderers.Find(x => x.Spell.BasicElement.NegatingElements.Contains(element));
                 if (negatingIcon != null)
                 {
                     IconSlot negatingSlot = negatingIcon.IconSlot;
-                    SpellCoroutineWrapper cor = _movingSpellIconsCors.Find(x => x.Icon.Spell.NegatingElements.Contains( element));
+                    SpellCoroutineWrapper cor = _movingSpellIconsCors.Find(x => x.Icon.Spell.BasicElement.NegatingElements.Contains( element));
                     if(cor!=null )
                     {
                         if( cor.Cor != null) StopCoroutine(cor.Cor);
@@ -169,7 +169,7 @@ public class PlayerSpells : MonoBehaviour
 
             }
             IconRenderer iconRenderer = _iconsRenderers.Find(x=>x.IconSlot == null);
-            iconRenderer.SpriteRenderer.sprite = spell.Sprite;
+            iconRenderer.SpriteRenderer.sprite = spell.BasicElement.Sprite;
             iconRenderer.IconSlot = _iconsSlots.Find(x=>x.AssignedIconRenderer == null);
             iconRenderer.IconSlot.Spell = spell;
             iconRenderer.SpriteRenderer.transform.position = _spellIconSpawn.position;
@@ -282,10 +282,10 @@ public class PlayerSpells : MonoBehaviour
     }
     private Elements.Element DetermineAttack()
     {
-        if(_selectedElements.Find(x=>x.Element==Elements.Element.ELECTRICITY)!=null) return Elements.Element.ELECTRICITY;
-        else if(_selectedElements.Find(x=>x.Element==Elements.Element.FIRE) != null) return Elements.Element.FIRE;
-        else if (_selectedElements.Find(x => x.Element == Elements.Element.WATER) != null) return Elements.Element.WATER;
-        else if (_selectedElements.Find(x=>x.Element==Elements.Element.WIND) != null) return Elements.Element.WIND;
+        if(_selectedElements.Find(x=>x.BasicElement.Element==Elements.Element.ELECTRICITY)!=null) return Elements.Element.ELECTRICITY;
+        else if(_selectedElements.Find(x=>x.BasicElement.Element==Elements.Element.FIRE) != null) return Elements.Element.FIRE;
+        else if (_selectedElements.Find(x => x.BasicElement.Element == Elements.Element.WATER) != null) return Elements.Element.WATER;
+        else if (_selectedElements.Find(x=>x.BasicElement.Element==Elements.Element.WIND) != null) return Elements.Element.WIND;
         return Elements.Element.PHYSICAL;
     }
     public bool StartAttack()
@@ -333,7 +333,7 @@ public class PlayerSpells : MonoBehaviour
         if(attackElement==Elements.Element.WIND)
         {
             _airAttackAudioEvent.Play(_audioSourceNotLooped);
-            int windForce = _selectedElements.FindAll(x => x.Element == Elements.Element.WIND).Count-1;
+            int windForce = _selectedElements.FindAll(x => x.BasicElement.Element == Elements.Element.WIND).Count-1;
 
             _windPushes[windForce].transform.position= _windPushTrans[windForce].transform.position;
             _windPushes[windForce].transform.up = _electricityTrigger.transform.up;

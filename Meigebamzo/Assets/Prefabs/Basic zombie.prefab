@@ -254,7 +254,7 @@ Transform:
   m_GameObject: {fileID: 2791894063501056754}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.29300004, y: -1.099, z: -0.065179326}
+  m_LocalPosition: {x: -0.29300004, y: -1.281, z: -0.065179326}
   m_LocalScale: {x: 0.28, y: 0.28, z: 0.28}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -403,9 +403,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -93990535
-  m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingLayerID: 1436092917
+  m_SortingLayer: 3
+  m_SortingOrder: 0
   m_Sprite: {fileID: -8583498972892399473, guid: e526dcf9b66016449945eabb75c7fc68, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -500,6 +500,7 @@ GameObject:
   - component: {fileID: 113519949606100858}
   - component: {fileID: 7753387110156861874}
   - component: {fileID: 4726785346542892988}
+  - component: {fileID: 3526626523839645303}
   m_Layer: 7
   m_Name: Basic zombie
   m_TagString: Untagged
@@ -542,7 +543,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _printState: 0
+  _burnMaterial: {fileID: 2100000, guid: ec59a02a8a1849742a26d2461efdcb18, type: 2}
   _enemyAnimationManager: {fileID: 7753387110156861874}
+  _timeToBurn: 2
   _enemyBasicStats: {fileID: 11400000, guid: 629d4dfa92ba98a44ba01dec35394984, type: 2}
   _playerTransform: {fileID: 0}
   _playerRB: {fileID: 0}
@@ -550,6 +553,7 @@ MonoBehaviour:
   _healthSystem: {fileID: 5916277308301343460}
   _rb: {fileID: 7741353463668616398}
   _elementalAffliction: {fileID: 4726785346542892988}
+  _spriteRenderer: {fileID: 8011701992250475579}
   _distanceToStartChase: 2
   _distanceToEndChase: 1
   _combat: {fileID: 7014902921027861717}
@@ -624,9 +628,28 @@ MonoBehaviour:
   _afflictedElementIcon: {fileID: 7495309278681948395}
   _iconsManager: {fileID: 0}
   _standardAfflictionDuration: 5
+  _negatedAfflictionDuration: 1
   OnAfflictedByElement:
     m_PersistentCalls:
       m_Calls: []
+  OnAfflictedRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3526626523839645303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8451225684118217708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcfc5f153a9357e46a9db41901e6b1b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _elementalAffliciotn: {fileID: 4726785346542892988}
+  _burningEffect: {fileID: 11400000, guid: a518cd81b47c84346b8cd87ef6533427, type: 2}
+  _damagable: {fileID: 5916277308301343460}
 --- !u!1001 &4202073373311495521
 PrefabInstance:
   m_ObjectHideFlags: 0

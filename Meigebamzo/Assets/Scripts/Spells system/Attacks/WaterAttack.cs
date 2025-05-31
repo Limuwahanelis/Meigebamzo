@@ -37,8 +37,9 @@ public class WaterAttack : ContinousAttack
     public override void SetSpells(List<PlayerElementalSpells> spells)
     {
         base.SetSpells(spells);
-        _numberOfAdditionalfireElements = _spells.FindAll(x => x.Element == Elements.Element.WATER).Count - 1;
-        _numberOfWindElements = _spells.FindAll(x => x.Element == Elements.Element.WIND).Count;
+        _numberOfAdditionalfireElements = _spells.FindAll(x => x.BasicElement.Element == Elements.Element.WATER).Count - 1;
+        _numberOfWindElements = _spells.FindAll(x => x.BasicElement.Element == Elements.Element.WIND).Count;
+        _basicElement = _spells.Find(x => x.BasicElement.Element == Elements.Element.WATER).BasicElement;
     }
     public override void Attack()
     {
@@ -109,7 +110,7 @@ public class WaterAttack : ContinousAttack
     IEnumerator DamageCor()
     {
         if (!_canDealDamage) yield break;
-        _damageInfo.element = Elements.Element.WATER;
+        _damageInfo.basicElement = _basicElement;
         _damageInfo.dmgPosition = _mainBody.transform.position;
         _damageInfo.dmg = 0;
         for (int i = 0; i < _damageablesInRange.Count; i++)

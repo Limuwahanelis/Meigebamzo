@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2768128898646876754}
   - component: {fileID: 5012593090124863792}
   - component: {fileID: 8688007698205042698}
-  - component: {fileID: 3927022794860193866}
   m_Layer: 0
   m_Name: Particle System
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8480278490675021415}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.546362, w: 0.83754915}
+  m_LocalRotation: {x: 0, y: 0, z: 0.93233585, w: -0.3615935}
   m_LocalPosition: {x: -1.0092592, y: 0.6111109, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4835,19 +4834,3 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &3927022794860193866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8480278490675021415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fee05b23e79485742a41e98a6a56d3d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _particleSystem: {fileID: 5012593090124863792}
-  _count: 1
-  _startLifetime: 0.3
-  _length: 2

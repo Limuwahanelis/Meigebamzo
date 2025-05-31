@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bcfc5f153a9357e46a9db41901e6b1b4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _elementalAffliciotn: {instanceID: 0}
+  - _burningEffect: {fileID: 11400000, guid: a518cd81b47c84346b8cd87ef6533427, type: 2}
+  - _damagable: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -42,7 +42,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Bits: 32
-    - _Fade: 0.14
+    - _Fade: 0
     - _Scale: 35.08
     - _subtract: 0.07
     m_Colors:

@@ -12,7 +12,9 @@ public abstract class EnemyController : MonoBehaviour
     public Rigidbody2D EnemyRB => _rb;
     [Header("Debug"), SerializeField] bool _printState;
     public GameObject MainBody => _mainBody;
+    [SerializeField] protected Material _burnMaterial;
     [Header("Enemy common"), SerializeField] protected AnimationManager _enemyAnimationManager;
+    [SerializeField] protected float _timeToBurn;
     [SerializeField] protected EnemyBasicStats _enemyBasicStats;
     //[SerializeField] protected EnemyHealthSystem2 _healthSystem;
     [SerializeField] protected Transform _playerTransform;
@@ -21,6 +23,7 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField] protected HealthSystem _healthSystem;
     [SerializeField] protected Rigidbody2D _rb;
     [SerializeField] protected ElementalAffliction _elementalAffliction;
+    [SerializeField] protected SpriteRenderer _spriteRenderer;
     protected Dictionary<Type, EnemyState> _enemyStates = new Dictionary<Type, EnemyState>();
     protected EnemyState _currentEnemyState;
     public virtual void Awake()
@@ -58,10 +61,16 @@ public abstract class EnemyController : MonoBehaviour
         yield return new WaitForNextFrameUnit();
         function();
     }
-
     protected void OnHit(DamageInfo info)
     {
          _elementalAffliction.TrySetElement(info.basicElement);
 
+    }
+    public virtual void OnDeath(IDamagable damagable, DamageInfo info)
+    {
+        if (info.basicElement.Element == Elements.Element.FIRE)
+        {
+            ChangeState(GetState(EnemyStateDieByFire.StateType));
+        }
     }
 }

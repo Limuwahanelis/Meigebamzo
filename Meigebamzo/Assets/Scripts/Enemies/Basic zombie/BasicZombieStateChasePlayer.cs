@@ -18,7 +18,6 @@ public class BasicZombieStateChasePlayer : EnemyState
         base.FixedUpdate();
         if (Vector2.Distance(_context.enemyRigidBody2D.position, _context.playerRB.position) > _context.distanceToStartChase)
         {
-            Logger.Log(Vector2.MoveTowards(_context.enemyRigidBody2D.position, _context.playerTransform.position, Time.fixedDeltaTime * _context.stats.Speed));
             _context.enemyTransform.position=Vector2.MoveTowards(_context.enemyRigidBody2D.position, _context.playerRB.position, Time.fixedDeltaTime * _context.stats.Speed);
         }
         else

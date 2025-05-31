@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
          _currentPlayerState = newState;
         Logger.Log(newState.GetType());
     }
-    private void PlayerDead(IDamagable damagable)
+    private void PlayerDead(IDamagable damagable, DamageInfo info)
     {
         _spells.EndAttack();
         OnPlayerDie?.Invoke();

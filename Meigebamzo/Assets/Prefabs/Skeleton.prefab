@@ -185,8 +185,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1436092917
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 4896934039923020159, guid: 248e440000fbdf146a75ab921b688e64, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -276,14 +276,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _printState: 1
+  _burnMaterial: {fileID: 2100000, guid: ec59a02a8a1849742a26d2461efdcb18, type: 2}
   _enemyAnimationManager: {fileID: 826602878539956008}
+  _timeToBurn: 1
   _enemyBasicStats: {fileID: 11400000, guid: 60c4cae28bf933445a43bf7c9a7fb3cf, type: 2}
   _playerTransform: {fileID: 0}
   _playerRB: {fileID: 0}
   _mainBody: {fileID: 6919438424511499427}
   _healthSystem: {fileID: 2617828868385343457}
   _rb: {fileID: 7707704747195128328}
-  _elementalAffliction: {fileID: 0}
+  _elementalAffliction: {fileID: 5792995304438843888}
+  _spriteRenderer: {fileID: 2346153575271933605}
   _distanceToStartChase: 6
   _distanceToEndChase: 8
   _combat: {fileID: 1156534241472181433}
@@ -316,7 +319,11 @@ MonoBehaviour:
   _afflictedElementIcon: {fileID: 0}
   _iconsManager: {fileID: 0}
   _standardAfflictionDuration: 5
+  _negatedAfflictionDuration: 1
   OnAfflictedByElement:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAfflictedRemoved:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &2617828868385343457

@@ -1,2 +1,21 @@
 fileFormatVersion: 2
 guid: 6d5c34bd522a11f4e90e2f85d2b2af01
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _burnMaterial: {fileID: 2100000, guid: ec59a02a8a1849742a26d2461efdcb18, type: 2}
+  - _enemyAnimationManager: {instanceID: 0}
+  - _enemyBasicStats: {instanceID: 0}
+  - _playerTransform: {instanceID: 0}
+  - _playerRB: {instanceID: 0}
+  - _mainBody: {instanceID: 0}
+  - _healthSystem: {instanceID: 0}
+  - _rb: {instanceID: 0}
+  - _elementalAffliction: {instanceID: 0}
+  - _spriteRenderer: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

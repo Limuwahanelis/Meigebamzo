@@ -24,7 +24,9 @@ public class ElectricityAttack : ContinousAttack
     float _triggerStartingSize;
     float _spread;
     float _triggerStartingOffset;
-
+    float _waterDMGNult=1.2f;
+    int _baseAttack=10;
+    int _additionalAttackPerElement = 3;
     int _numberOfAdditionalElectricityElements = 0;
 
     bool _canAttackElectricity=true;
@@ -52,6 +54,8 @@ public class ElectricityAttack : ContinousAttack
     {
         base.SetSpells(spells);
         _basicElement = _spells.Find(x => x.BasicElement.Element == Elements.Element.ELECTRICITY).BasicElement;
+        PlayerElementalSpells fireSpell = _spells.Find(x => x.BasicElement.Element == Elements.Element.FIRE);
+        if (fireSpell != null) _basicElement = fireSpell.BasicElement;
     }
     public override void Attack()
     {
@@ -60,6 +64,8 @@ public class ElectricityAttack : ContinousAttack
         ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams();
         float angle = UnityEngine.Random.Range(-_spread, _spread);
         float spread = _spread;
+        float waterDamageMult = 1;
+       
         foreach (ParticleSystem p in _allparticles[0].particles)
         {
             p.transform.transform.position = _mainBody.position;
@@ -74,14 +80,15 @@ public class ElectricityAttack : ContinousAttack
                 if (_canAttackElectricity)
                 {
                     _angles[k] = angle;
-                    p.transform.transform.position = _mainBody.position;
-                    p.transform.transform.up = direction;
-                    p.transform.transform.Rotate(_playerSpells.transform.forward, angle);
+                    angle = UnityEngine.Random.Range(-spread, spread);
+
                     p.Emit(parameters, 1);
                 }
                 else
                 {
-                   // p.transform.transform.Rotate(_playerSpells.transform.forward, _angles[k]);
+                    p.transform.transform.position = _mainBody.position;
+                    p.transform.transform.up = direction;
+                    p.transform.transform.Rotate(_playerSpells.transform.forward, _angles[k]);
                 }
                 k++;
             }
@@ -116,87 +123,16 @@ public class ElectricityAttack : ContinousAttack
                         damageable = _electricityTargets[i];
                         if (damageable != null)
                         {
-                            damageable.TakeDamage(new DamageInfo(10 + 3 * _numberOfAdditionalElectricityElements, _mainBody.transform.position, _basicElement));
+                            if (damageable.ElementalAffliction.ElementAffectedBy == Elements.Element.WATER) waterDamageMult = _waterDMGNult;
+                            damageable.TakeDamage(new DamageInfo((int)((_baseAttack + _additionalAttackPerElement * _numberOfAdditionalElectricityElements)*waterDamageMult), _mainBody.transform.position, _basicElement));
                         }
                     }
                     currMiddlePoint = _electricityTargets[i].MainBody;
                 }
             }
         }
-       
-
-        //int i = 0;
-        //foreach (ParticleSystem p in _particles)
-        //{
-        //    p.transform.transform.up = direction;
-
-        //    if (_canAttackElectricity)
-        //    {
-        //        //_angles[i] = angle;
-        //        angle = UnityEngine.Random.Range(-spread, spread);
-        //        p.transform.transform.Rotate(_playerSpells.transform.forward, angle);
-        //        p.Emit(parameters, 1);
-        //        if (damageable != null)
-        //        {
-        //            damageable.TakeDamage(new DamageInfo(10 + 3 * _numberOfAdditionalElectricityElements, _mainBody.transform.position, _damageElement));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        p.transform.transform.Rotate(_playerSpells.transform.forward, _angles[i]);
-        //    }
-        //    i++;
-
-        //}
+      
         _playerSpells.StartCoroutine(ElectricityAttackCooldown(_thunderParticlesPrefab.main.startLifetime.constant - 0.02f));
-        //Vector2 nextTargetMouseDirection = RaycastFromCamera2D.MouseInWorldPos - GetClosestDamageableForThunder().Transform.position;
-        //Vector2 direction = RaycastFromCamera2D.MouseInWorldPos - _mainBody.position;
-        //direction.Normalize();
-        //ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams();
-        //float angle = UnityEngine.Random.Range(-_spread, _spread);
-        //float spread = _spread;
-        //IDamagable damageable = null;
-        //foreach (ParticleSystem p in _particles)
-        //{ 
-        //    p.transform.transform.position = _mainBody.position;
-        //}
-
-        //if (_damageablesInRange.Count == 0)
-        //{
-        //    parameters = SetUpThunderParticleParams(direction, 1+0.5f*_numberOfAdditionalElectricityElements/2 -0.125f);
-        //}
-        //else
-        //{
-        //    spread = _spread / 2;
-        //    damageable = GetClosestDamageableForThunder();
-        //    direction = ((Vector2)damageable.Transform.position - new Vector2(_mainBody.position.x, _mainBody.position.y)).normalized;
-        //    parameters = SetUpThunderParticleParams(direction, Vector2.Distance(damageable.Transform.position, _mainBody.position) / 2);
-
-        //}
-        //int i = 0;
-        //foreach (ParticleSystem p in _particles)
-        //{
-        //    p.transform.transform.up = direction;
-
-        //    if (_canAttackElectricity)
-        //    {
-        //        _angles[i] = angle;
-        //        angle = UnityEngine.Random.Range(-spread, spread);
-        //        p.transform.transform.Rotate(_playerSpells.transform.forward, angle);
-        //        p.Emit(parameters, 1);
-        //        if (damageable != null)
-        //        {
-        //            damageable.TakeDamage(new DamageInfo(10+3*_numberOfAdditionalElectricityElements, _mainBody.transform.position, _damageElement));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        p.transform.transform.Rotate(_playerSpells.transform.forward, _angles[i]);
-        //    }
-        //    i++;
-
-        //}
-        //_playerSpells.StartCoroutine(ElectricityAttackCooldown(_thunderParticlesPrefab.main.startLifetime.constant - 0.02f));
     }
 
     public override void EndAttack()

@@ -29,6 +29,6 @@ public class BasicZombieStateIdle : EnemyState
     }
     public override void InterruptState()
     {
-     
+        _context.coroutineHolder.StopAllCoroutines();
     }
 }

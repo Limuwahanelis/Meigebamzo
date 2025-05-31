@@ -123,7 +123,7 @@ public class PlayerSpells : MonoBehaviour
         enemy.GetComponent<IDamagable>().OnDeath -= OnEnemyDied;
         Logger.Log("Removed");
     }
-    private void OnEnemyDied(IDamagable damagable)
+    private void OnEnemyDied(IDamagable damagable, DamageInfo info)
     {
         damagable.OnDeath -= OnEnemyDied;
         _damageablesInRange.Remove(damagable);

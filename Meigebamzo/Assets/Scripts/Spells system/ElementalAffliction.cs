@@ -16,9 +16,11 @@ public class ElementalAffliction : MonoBehaviour
     [SerializeField] float _standardAfflictionDuration=5f;
     [SerializeField] float _negatedAfflictionDuration=1f;
 
+
     private Elements.Element _elementAffectedBy;
     private bool _canFireEvent = true;
     public UnityEvent<Elements.Element> OnAfflictedByElement;
+    public UnityEvent<Elements.Element> OnAfflictedRemoved;
     private Coroutine _elementalCor;
     private void Start()
     {
@@ -57,13 +59,14 @@ public class ElementalAffliction : MonoBehaviour
     }
     public void ClearElement()
     {
-        _elementAffectedBy = Elements.Element.PHYSICAL;
         if (_afflictedElementIcon) _afflictedElementIcon.enabled = false;
         if (_elementalCor != null)
         {
             StopCoroutine(_elementalCor);
+            OnAfflictedRemoved?.Invoke(_elementAffectedBy);
             _elementalCor = null;
         }
+        _elementAffectedBy = Elements.Element.PHYSICAL;
         
     }
 

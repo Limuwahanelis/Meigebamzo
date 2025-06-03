@@ -23,6 +23,7 @@ public class FireAttack : ContinousAttack
     public FireAttack(PlayerSpells playerSpells, ParticleSystem system,List<IDamagable> damageables,PolygonCollider2D fireTrigger,Transform mainBody, float fireRange,
         float fireAngle, int attackDamage,float attackCooldown,AudioEvent fireAttackAudioEvent,AudioSource audioSource) 
     {
+        IsContinous = true;
         _playerSpells = playerSpells;
         _particleSystem = system;
         _damageablesInRange = damageables;

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ElectricityAttack : ContinousAttack
 {
+    
     private AllEnemiesList _enemiesList;
     private List<IDamagable> _electricityTargets=new List<IDamagable>();
     List<ParticleListWrapper> _allparticles = new List<ParticleListWrapper>();
@@ -34,6 +35,7 @@ public class ElectricityAttack : ContinousAttack
         PlayerSpells playerSpells, ParticleSystem thunderParticlesPrefab,BoxCollider2D electricityTrigger,
         List<ParticleListWrapper> allparticles,AudioEvent audioEvent,AudioSource audioSource)
     {
+        IsContinous = true;
         _allparticles = allparticles;
         _mainBody = mainBody;
         _spread = spread;

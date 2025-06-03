@@ -73,7 +73,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] AudioEvent _airAttackAudioEvent;
     [SerializeField] List<Transform> _windPushTrans= new List<Transform>();
     [SerializeField] List<WindPush> _windPushes= new List<WindPush>();
-
+    [SerializeField] Transform _windPushPosHolder;
     private int _corIndex = 0;
     private List<float> angles = new List<float>() {0,0 };
     private bool _canAttackElectricity = true;
@@ -105,11 +105,12 @@ public class PlayerSpells : MonoBehaviour
             _electricityTrigger,_allparticles, _electricityAudioEvent,_audioSource));
         _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger,
             _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown, _waterAttackAudioevent,_audioSource));
+        _continousAttacks.Add(Elements.Element.WIND, new WindAttack(_windPushes, _airAttackAudioEvent, _audioSourceNotLooped, _windPushTrans, _windPushPosHolder));
     }
     private void Update()
     {
         _thunderAttackDetection.up = (RaycastFromCamera2D.MouseInWorldPos-_mainBody.position ).normalized;
-
+        _windPushPosHolder.up = (RaycastFromCamera2D.MouseInWorldPos - _mainBody.position).normalized; ;
     }
     public void SetEnemyForAttack(GameObject enemy)
     {
@@ -182,51 +183,6 @@ public class PlayerSpells : MonoBehaviour
             newCor.Icon = iconRenderer;
             _movingSpellIconsCors.Add(newCor);
             _corIndex++;
-
-            //int slotIndex = _selectedElements.Count - 1;
-            //int iconRendererIndex = _iconsRenderers.FindIndex(x=>x.IconSlot==null);
-            //int negatingIconIndex=iconRendererIndex;
-            //int negatingIconSlot;
-            //_spellSlotsRenderes[iconRendererIndex].sprite = spell.Sprite;
-            //_spellSlotsRenderes[iconRendererIndex].transform.position = _spellIconSpawn.position;
-
-            //IconSlot iconSlot = _iconsSlots.Find(x => x.AssignedIconRenderer == null);
-            //iconSlot.Spell = spell;
-            //iconSlot.AssignedIconRenderer = _iconsRenderers[iconRendererIndex];
-            //_iconsRenderers[iconRendererIndex].IconSlot = iconSlot;
-            //_spellSlotsRenderes[iconRendererIndex].gameObject.SetActive(true);
-            //if (_selectedElements.Count > 1)
-            //{
-            //    IconSlot negatingSlot = _iconsSlots.Find(x => x.Spell.NegatingElements.Contains(element));
-            //    if (negatingSlot != null)
-            //    {
-            //        negatingIconSlot = negatingSlot.Index;
-
-
-            //        if (negatingIconSlot != -1)
-            //        {
-
-            //            destroyIcons = true;
-            //            negatingIconIndex = _iconsSlots[negatingIconSlot].AssignedIconRenderer.Index;
-            //            _iconsRenderers[negatingIconIndex].SpriteRenderer.sortingOrder = 2;
-            //            _selectedElements.RemoveAt(_selectedElements.Count - 1);
-            //            _selectedElements.RemoveAt(negatingIconSlot);
-
-
-            //            _iconsRenderers[iconRendererIndex].IconSlot = _iconsSlots[negatingIconSlot + 1];
-            //            _iconsRenderers[iconRendererIndex].SpriteRenderer.sortingOrder = 2;
-            //        }
-            //    }
-
-            //}
-            //CoroutineWrapper coroutineWrapper = new CoroutineWrapper();
-            //coroutineWrapper.NegatingIcon = _iconsRenderers[negatingIconIndex];
-            //coroutineWrapper.Icon = _iconsRenderers[iconRendererIndex];
-            //coroutineWrapper.DestroyIcons = destroyIcons;
-            //coroutineWrapper.Cor = StartCoroutine(MoveSpellIconToSlot(_iconsRenderers[iconRendererIndex].IconSlot.Slot, _iconsRenderers[iconRendererIndex].SpriteRenderer.transform, _corIndex, negatingIconIndex, iconRendererIndex, destroyIcons));
-            //coroutineWrapper.index = _corIndex;
-            //_corIndex++;
-            //_movingSpellIconsCors.Add(coroutineWrapper);
         }
     }
     private void AdjustIcons()
@@ -249,36 +205,7 @@ public class PlayerSpells : MonoBehaviour
 
             }
         }
-        //CoroutineWrapper wrapper;
-        //for(int i = 0; i< activeElementsIcon.Count;i++)
-        //{
-        //    wrapper = _movingSpellIconsCors.Find(x => x.Icon == activeElementsIcon[i]);
-        //    IconSlot oldSlot = wrapper.Icon.IconSlot;
-        //    wrapper.Icon.IconSlot = _iconsSlots.Find(x => x.AssignedIconRenderer == null);
-        //    wrapper.Icon.IconSlot.Spell = oldSlot.Spell;
-        //    oldSlot.AssignedIconRenderer = null;
-        //    oldSlot.Spell = _physicalSpell;
-        //    wrapper.Icon.IconSlot.AssignedIconRenderer = wrapper.Icon;
-        //    if (wrapper.Cor!=null) StopCoroutine(wrapper.Cor);
 
-        //    _corIndex++;
-        //    wrapper.Cor= StartCoroutine(MoveSpellIconToSlot(wrapper.Icon.IconSlot.Slot, wrapper.Icon.SpriteRenderer.transform, _corIndex, wrapper.NegatingIcon.Index, wrapper.IconIndex, wrapper.DestroyIcons));
-        //    wrapper.index = _corIndex;
-        //}
-        //for(int i=0;i< activeElementsIcon.Count;i++)
-        //{
-        //    CoroutineWrapper coroutineWrapper = new CoroutineWrapper();
-        //    iconIndex = _iconsRenderers.FindIndex(x => x.SpriteRenderer == activeElementsIcon[i]);
-        //    _iconsRenderers[iconIndex].SlotTransform = _spellIconsSlots[i];
-        //    if (i < activeElementsIcon.Count - 1)
-        //    {
-        //        negatingIconRendererIndex = _selectedElements.FindIndex(x => x.NegatingElements.Contains(_selectedElements[i].Element));
-        //        destroyIcons = true;
-        //    }
-        //    coroutineWrapper.Cor = StartCoroutine(MoveSpellIconToSlot(_spellIconsSlots[i], activeElementsIcon[i].transform, _corIndex, negatingIconRendererIndex, iconIndex, destroyIcons));
-        //    _movingSpellIconsCors.Add(coroutineWrapper);
-        //    _corIndex++;
-        //}
     }
     private Elements.Element DetermineAttack()
     {
@@ -327,23 +254,30 @@ public class PlayerSpells : MonoBehaviour
             _cutrrentContinousAttack.SetSpells(_selectedElements);
             _selectedElements.Clear();
             _cutrrentContinousAttack.StartAttack();
-            return true;
+            if(_cutrrentContinousAttack.IsContinous) return true;
+            else
+            {
+                _cutrrentContinousAttack.EndAttack();
+                RemoveEnemiesFromRange();
+                _cutrrentContinousAttack = null;
+            }
+
         }
 
-        if(attackElement==Elements.Element.WIND)
-        {
-            _airAttackAudioEvent.Play(_audioSourceNotLooped);
-            int windForce = _selectedElements.FindAll(x => x.BasicElement.Element == Elements.Element.WIND).Count-1;
+        //if(attackElement==Elements.Element.WIND)
+        //{
+        //    _airAttackAudioEvent.Play(_audioSourceNotLooped);
+        //    int windForce = _selectedElements.FindAll(x => x.BasicElement.Element == Elements.Element.WIND).Count-1;
 
-            _windPushes[windForce].transform.position= _windPushTrans[windForce].transform.position;
-            _windPushes[windForce].transform.up = _electricityTrigger.transform.up;
-            _windPushes[windForce].transform.Rotate(_windPushes[windForce].transform.forward, 45f);
-            _windPushes[windForce].SetPushForce(windForce + 1);
-            _windPushes[windForce].GetComponent<Animator>().SetInteger("PushType",windForce);
-            _windPushes[windForce].GetComponent<Animator>().SetTrigger("Push");
-            _windPushes[windForce].transform.SetParent(null);
-            _selectedElements.Clear();
-        }
+        //    _windPushes[windForce].transform.position= _windPushTrans[windForce].transform.position;
+        //    _windPushes[windForce].transform.up = _electricityTrigger.transform.up;
+        //    _windPushes[windForce].transform.Rotate(_windPushes[windForce].transform.forward, 45f);
+        //    _windPushes[windForce].SetPushForce(windForce + 1);
+        //    _windPushes[windForce].GetComponent<Animator>().SetInteger("PushType",windForce);
+        //    _windPushes[windForce].GetComponent<Animator>().SetTrigger("Push");
+        //    _windPushes[windForce].transform.SetParent(null);
+        //    _selectedElements.Clear();
+        //}
 
         return false;
     }

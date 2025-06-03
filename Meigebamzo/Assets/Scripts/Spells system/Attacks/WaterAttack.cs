@@ -21,6 +21,7 @@ public class WaterAttack : ContinousAttack
     private int _numberOfWindElements;
     public WaterAttack(PlayerSpells playerSpells, ParticleSystem system, List<IDamagable> damageables, PolygonCollider2D fireTrigger, Transform mainBody, float fireRange, float fireAngle, int attackDamage, float attackCooldown,AudioEvent waterAudioEvent,AudioSource auioSource)
     {
+        IsContinous = true;
         _playerSpells = playerSpells;
         _particleSystem = system;
         _damageablesInRange = damageables;

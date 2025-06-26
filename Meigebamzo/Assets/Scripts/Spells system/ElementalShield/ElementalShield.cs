@@ -5,14 +5,18 @@ using UnityEngine.Events;
 
 public class ElementalShield : MonoBehaviour
 {
-    public List<ElementalSpell> ElementalSpellsToShieldFrom => _elementalSpellsToShieldFrom;
-    private List<Elements.Element> _elementsToShieldFrom= new List<Elements.Element>();
-    [SerializeField]private List<ElementalSpell> _elementalSpellsToShieldFrom = new List<ElementalSpell>();
     public UnityEvent<ElementalShield> OnShieldDisabled;
-
+    public List<ElementalSpell> ElementalSpellsToShieldFrom => _elementalSpellsToShieldFrom;
+    [SerializeField]private List<ElementalSpell> _elementalSpellsToShieldFrom = new List<ElementalSpell>();
+    private ElementalShieldLogic _elementalShieldLogic = new ElementalShieldLogic();
+    private void Awake()
+    {
+        _elementalShieldLogic.OnShieldDisabled+=(ElementalShieldDisabled);
+        SetUp(ElementalSpellsToShieldFrom);
+    }
     public void SetUp(List<ElementalSpell> elementalSpells)
     {
-        _elementsToShieldFrom = elementalSpells.Select(x=>x.Element).ToList();
+        _elementalShieldLogic.SetUp(elementalSpells);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -20,7 +24,7 @@ public class ElementalShield : MonoBehaviour
         ElementalAffliction tmp= collision.attachedRigidbody.GetComponentInParent<ElementalAffliction>();
         if(tmp!=null)
         {
-            tmp.AddElementsFromShield(this);
+            tmp.AddElementsFromShield(_elementalShieldLogic);
         }
 
     }
@@ -30,12 +34,15 @@ public class ElementalShield : MonoBehaviour
         ElementalAffliction tmp = collision.attachedRigidbody.GetComponentInParent<ElementalAffliction>();
         if (tmp != null)
         {
-            tmp.RemoveElementsFromShield(this);
+            tmp.RemoveElementsFromShield(_elementalShieldLogic);
         }
     }
-    private void OnDisable()
+    private void ElementalShieldDisabled(ElementalShieldLogic elementalShieldLogic)
     {
         OnShieldDisabled?.Invoke(this);
     }
-
+    private void OnDisable()
+    {
+        _elementalShieldLogic.DisableShield();
+    }
 }

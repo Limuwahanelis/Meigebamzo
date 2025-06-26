@@ -114,7 +114,7 @@ public class PlayerSpells : MonoBehaviour
         _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger,
             _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown, _waterAttackAudioevent,_audioSource));
         _continousAttacks.Add(Elements.Element.WIND, new WindAttack(_windPushes, _airAttackAudioEvent, _audioSourceNotLooped, _windPushTrans, _windPushPosHolder));
-        _continousAttacks.Add(Elements.Element.SHIELD, new SelfShieldAttack(_selfShieldSprites, _auraShiledSprites,this, _shieldHealthbar, _elementalAffliction));
+        _continousAttacks.Add(Elements.Element.SHIELD, new SelfShieldAttack(this, _shieldHealthbar, _elementalAffliction));
     }
     private void Update()
     {

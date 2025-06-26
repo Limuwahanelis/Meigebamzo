@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.Rendering.DebugUI;
 
 public class ElementalAffliction : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class ElementalAffliction : MonoBehaviour
     {
         public SpriteRenderer spriteRenderer;
         public Elements.Element Element;
+        public MaterialPropertyBlock MaterialPropertyBlock;
     }
     public Coroutine AssignedAfflictionCorutine {  get; set; }
     public Elements.Element ElementAffectedBy => _elementAffectedBy;
@@ -71,26 +73,9 @@ public class ElementalAffliction : MonoBehaviour
         else _elementalCor = StartCoroutine(AfflictionCor());
         if (_canFireEvent) OnAfflictedByElement?.Invoke(basicElement.Element);
     }
-    public void AddElementFromSelfShield(ElementalSpell elementalSpell)
+    public void AddElementsFromShield(ElementalShieldLogic shield)
     {
-       
-        _elementsImmuneToFromShields.Add(elementalSpell.Element);
-        //_shieldSprites.Add( _shieldObjectsPool.GetItem().GetComponent<SpriteRenderer>());
-        //if(_shieldPropertyBlocks.Count<_shieldSprites.Count)
-        //{
-        //    _shieldPropertyBlocks.Add(new MaterialPropertyBlock());
-        //}
-        //_shieldPropertyBlocks[_shieldPropertyBlocks.Count-1].SetColor("_Color", elementalSpell.AssociatedColor);
-        //_shieldPropertyBlocks[_shieldPropertyBlocks.Count-1].SetFloat("_Radius", 0.04f + 0.02f * _shieldPropertyBlocks.Count-1);
-        //_shieldSprites[_shieldSprites.Count-1].SetPropertyBlock(_shieldPropertyBlocks[_shieldPropertyBlocks.Count-1]);
-    }
-    public void RemoveElementFromSelfShield(ElementalSpell elementalSpell)
-    {
-        _elementsImmuneToFromShields.Remove(elementalSpell.Element);
-    }
-    public void AddElementsFromShield(ElementalShield shield)
-    {
-        shield.OnShieldDisabled.AddListener(RemoveElementsFromShield);
+        shield.OnShieldDisabled+=(RemoveElementsFromShield);
 
         for (int i=0;i<shield.ElementalSpellsToShieldFrom.Count;i++)
         {
@@ -100,30 +85,35 @@ public class ElementalAffliction : MonoBehaviour
             }
             else
             {
+                Logger.Log($"ADD element: {shield.ElementalSpellsToShieldFrom[i].Element}");
                 GameObject go = _shieldObjectsPool.GetItem();
                 SpriteRenderer newRenderer = go.GetComponent<SpriteRenderer>();
                 go.GetComponent<FollowObject>().SetObjectToFollow(_shieldSpawnTran);
                 newRenderer.enabled = true;
                 _shieldSprites.Add(newRenderer);
-                _assignedSpriteRenderers.Add(new ElementAssignedToSpriteRenderer() { Element = shield.ElementalSpellsToShieldFrom[i].Element, spriteRenderer = newRenderer });
+                MaterialPropertyBlock block;
                 if (_shieldPropertyBlocks.Count < _shieldSprites.Count)
                 {
                     _shieldPropertyBlocks.Add(new MaterialPropertyBlock());
                 }
-                _shieldPropertyBlocks[_shieldPropertyBlocks.Count - 1].SetColor("_Color", shield.ElementalSpellsToShieldFrom[i].AssociatedColor);
-                _shieldPropertyBlocks[_shieldPropertyBlocks.Count - 1].SetFloat("_Radius", 0.04f + 0.02f * (i));
-                _shieldSprites[_shieldSprites.Count-1].SetPropertyBlock(_shieldPropertyBlocks[_shieldPropertyBlocks.Count - 1]);
+                block = _shieldPropertyBlocks.Find(x => _assignedSpriteRenderers.Find(y => y.MaterialPropertyBlock == x) == null);
+                block.SetColor("_Color", shield.ElementalSpellsToShieldFrom[i].AssociatedColor);
+                block.SetFloat("_Radius", 0.04f + 0.02f * (_shieldSprites.Count-1));
+                newRenderer.SetPropertyBlock(block);
+                _assignedSpriteRenderers.Add(new ElementAssignedToSpriteRenderer() { Element = shield.ElementalSpellsToShieldFrom[i].Element, spriteRenderer = newRenderer,MaterialPropertyBlock = block });
+                
             }
             _elementsImmuneToFromShields.Add(shield.ElementalSpellsToShieldFrom[i].Element);
         }
 
            
     }
-    public void RemoveElementsFromShield( ElementalShield shield)
+    public void RemoveElementsFromShield( ElementalShieldLogic shield)
     {
         Logger.Log("remove lements shield");
-        shield.OnShieldDisabled.RemoveListener(RemoveElementsFromShield);
+        shield.OnShieldDisabled-=(RemoveElementsFromShield);
         List<Elements.Element> toRemove = shield.ElementalSpellsToShieldFrom.Select(x => x.Element).ToList();
+
         for (int i = 0; i < toRemove.Count; i++)
         {
             _elementsImmuneToFromShields.Remove(toRemove[i]);
@@ -136,17 +126,29 @@ public class ElementalAffliction : MonoBehaviour
             }
             else
             {
+                Logger.Log($"REMOVE element: {shield.ElementalSpellsToShieldFrom[i].Element}");
                 ElementAssignedToSpriteRenderer elementAssigned = _assignedSpriteRenderers.Find(y => y.Element == shield.ElementalSpellsToShieldFrom[i].Element);
                 elementAssigned.spriteRenderer.enabled = false;
                 SpriteRenderer spriteRenderer = _shieldSprites.Find(x => x == elementAssigned.spriteRenderer);
                 _shieldSprites.Remove(spriteRenderer);
                 _shieldObjectsPool.Relaese(spriteRenderer.gameObject); 
                 _assignedSpriteRenderers.Remove(elementAssigned);
+              
             }
         }
+        UpdateShieldRings();
 
-        
 
+
+    }
+    private void UpdateShieldRings()
+    {
+        for(int i=0;i< _assignedSpriteRenderers.Count;i++)
+        {
+            _assignedSpriteRenderers[i].MaterialPropertyBlock.SetFloat("_Radius", 0.04f + 0.02f * (i));
+            Logger.Log( _assignedSpriteRenderers[i].MaterialPropertyBlock.GetColor("_Color"));
+            _assignedSpriteRenderers[i].spriteRenderer.SetPropertyBlock(_assignedSpriteRenderers[i].MaterialPropertyBlock);
+        }
     }
     public void ClearElement()
     {
@@ -176,4 +178,5 @@ public class ElementalAffliction : MonoBehaviour
         _iconsManager = FindAnyObjectByType<ElementSpriteIconManager>();
         _shieldObjectsPool = FindAnyObjectByType<GameObjectPool>();
     }
+
 }

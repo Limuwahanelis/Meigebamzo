@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class ElementInteractableObject : MonoBehaviour, IDamagable
 {
-    public UnityEvent<BasicElement> OnElementInteracted;
+    public UnityEvent<ElementalSpell> OnElementInteracted;
     [SerializeField] List<Elements.Element> _elementsToInteractWith= new List<Elements.Element>();
     [SerializeField] ElementalAffliction _elementalAffliction;
     public Transform Transform => transform;

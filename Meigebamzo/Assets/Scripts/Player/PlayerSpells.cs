@@ -36,6 +36,7 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] PlayerElementalSpells _physicalSpell;
     [SerializeField] AudioSource _audioSource;
     [SerializeField] AudioSource _audioSourceNotLooped;
+    [SerializeField] ElementalAffliction _elementalAffliction;
     private List<PlayerElementalSpells> _selectedElements = new List<PlayerElementalSpells>();
 
     [Header("Electricity")]
@@ -74,6 +75,12 @@ public class PlayerSpells : MonoBehaviour
     [SerializeField] List<Transform> _windPushTrans= new List<Transform>();
     [SerializeField] List<WindPush> _windPushes= new List<WindPush>();
     [SerializeField] Transform _windPushPosHolder;
+    [Header("Shield")]
+    [SerializeField] List<SpriteRenderer> _selfShieldSprites;
+    [SerializeField] List<SpriteRenderer> _auraShiledSprites;
+    [SerializeField] StandardHealthBarF _shieldHealthbar;
+    [SerializeField] float _auraShieldRadius;
+
     private int _corIndex = 0;
     private List<float> angles = new List<float>() {0,0 };
     private bool _canAttackElectricity = true;
@@ -99,6 +106,7 @@ public class PlayerSpells : MonoBehaviour
         {
             spriteRenderer.gameObject.SetActive(false);
         }
+        
         _continousAttacks.Add(Elements.Element.FIRE, new FireAttack(this,_fireParticleSystem, _damageablesInRange, _fireTrigger, 
             _mainBody, _fireRange, _fireAngle,_fireAttackDamage,_fireAttackCooldown, _fireAudioEvent,_audioSource));
         _continousAttacks.Add(Elements.Element.ELECTRICITY, new ElectricityAttack(_mainBody, _spread, _paritcles, _damageablesInRange, angles, this, _thunderParticlesPrefab,
@@ -106,6 +114,7 @@ public class PlayerSpells : MonoBehaviour
         _continousAttacks.Add(Elements.Element.WATER, new WaterAttack(this, _waterParticleSystem, _damageablesInRange,_waterTrigger,
             _mainBody, _waterRange, _waterAngel, 0, _waterAttackCooldown, _waterAttackAudioevent,_audioSource));
         _continousAttacks.Add(Elements.Element.WIND, new WindAttack(_windPushes, _airAttackAudioEvent, _audioSourceNotLooped, _windPushTrans, _windPushPosHolder));
+        _continousAttacks.Add(Elements.Element.SHIELD, new SelfShieldAttack(_selfShieldSprites, _auraShiledSprites,this, _shieldHealthbar, _elementalAffliction));
     }
     private void Update()
     {
@@ -141,6 +150,7 @@ public class PlayerSpells : MonoBehaviour
             //Logger.Log(element.ToString());
             bool destroyIcons = false;
             PlayerElementalSpells spell = _availableElementalSpells.Find(x => x.BasicElement.Element == element);
+            if (spell == null) Logger.Error($"No spell of {element} element !!", this);
             _selectedElements.Add(spell);
 
             if(_selectedElements.Count>1)
@@ -209,7 +219,8 @@ public class PlayerSpells : MonoBehaviour
     }
     private Elements.Element DetermineAttack()
     {
-        if(_selectedElements.Find(x=>x.BasicElement.Element==Elements.Element.ELECTRICITY)!=null) return Elements.Element.ELECTRICITY;
+        if (_selectedElements.Find(x => x.BasicElement.Element == Elements.Element.SHIELD) != null) return Elements.Element.SHIELD;
+        else if(_selectedElements.Find(x=>x.BasicElement.Element==Elements.Element.ELECTRICITY)!=null) return Elements.Element.ELECTRICITY;
         else if(_selectedElements.Find(x=>x.BasicElement.Element==Elements.Element.FIRE) != null) return Elements.Element.FIRE;
         else if (_selectedElements.Find(x => x.BasicElement.Element == Elements.Element.WATER) != null) return Elements.Element.WATER;
         else if (_selectedElements.Find(x=>x.BasicElement.Element==Elements.Element.WIND) != null) return Elements.Element.WIND;

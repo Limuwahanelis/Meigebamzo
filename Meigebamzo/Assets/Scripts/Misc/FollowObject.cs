@@ -17,4 +17,8 @@ public class FollowObject : MonoBehaviour
     {
         transform.position = _transformToFollow.position+ _offset;
     }
+    public void SetObjectToFollow(Transform transform)
+    {
+        _transformToFollow = transform;
+    }
 }

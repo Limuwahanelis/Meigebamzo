@@ -316,6 +316,17 @@
                 },
                 {
                     "name": "",
+                    "id": "93b7e40e-6dea-4d73-a31a-0e1c3403dc75",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "Scale(factor=5)",
+                    "groups": "",
+                    "action": "ElementSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "6fffeb67-1a4e-48e5-887b-bd3e269915e8",
                     "path": "",
                     "interactions": "",

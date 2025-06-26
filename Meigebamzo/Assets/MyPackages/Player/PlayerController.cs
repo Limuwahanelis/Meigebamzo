@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerMovement _playerMovement;
     [SerializeField] PlayerChecks _playerChecks;
     [SerializeField] PlayerCombat _playerCombat;
+    [SerializeField] ElementalAffliction _elementalAffliction;
     //[SerializeField] PlayerCollisions _playerCollisions;
     [SerializeField] PlayerHealthSystem _playerHealthSystem;
     [SerializeField] GameObject _gameOverPanel;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
 
         Initalize();
         _playerHealthSystem.OnDeath += PlayerDead;
+        _playerHealthSystem.OnHitEvent += OnHit;
     }
     protected void Initalize()
     {
@@ -98,6 +100,10 @@ public class PlayerController : MonoBehaviour
     {
        // _playerMovement.PushPlayer(psuhInfo);
         _currentPlayerState.Push();
+    }
+    private void OnHit(DamageInfo info)
+    {
+        _elementalAffliction.TrySetElement(info.basicElement);
     }
     public Coroutine WaitAndExecuteFunction(float timeToWait, Action function)
     {

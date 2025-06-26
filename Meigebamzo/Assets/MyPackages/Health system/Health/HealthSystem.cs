@@ -48,6 +48,12 @@ public class HealthSystem : MonoBehaviour,IDamagable
     {
         if (_isInvincibleToDamage) return;
         if (!IsAlive) return;
+        if(_elementalAffliction)
+        {
+            if (_elementalAffliction.ElementsImmuneTo.Contains(info.basicElement.Element)) return;
+            Logger.Log("dealt");
+            _elementalAffliction.TrySetElement(info.basicElement);
+        }
         _currentHP -= info.dmg;
         if (_hpBar != null) _hpBar.SetHealth(_currentHP);
         OnHitEvent?.Invoke(info);

@@ -6,9 +6,9 @@ public abstract class ContinousAttack
     public bool IsContinous { get; protected set; }
     protected List<PlayerElementalSpells> _spells= new List<PlayerElementalSpells>();
     protected List<IDamagable> _damageablesInRange = new List<IDamagable>();
-    protected BasicElement _basicElement;
-    public abstract void Attack();
+    protected ElementalSpell _basicElement;
     public abstract void StartAttack();
+    public abstract void Attack();
     public abstract void EndAttack();
 
     public virtual void SetSpells(List<PlayerElementalSpells>spells)

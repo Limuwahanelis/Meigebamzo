@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="BasicElement")]
-public class BasicElement : ScriptableObject
+[CreateAssetMenu(menuName ="ElementalSpell")]
+public class ElementalSpell : ScriptableObject
 {
     public List<Elements.Element> NegatingElements => _negatingElements;
     public Color AssociatedColor => _associatedColor;

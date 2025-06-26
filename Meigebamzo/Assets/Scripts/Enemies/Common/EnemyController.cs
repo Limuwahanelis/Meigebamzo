@@ -68,6 +68,7 @@ public abstract class EnemyController : MonoBehaviour
     }
     public virtual void OnDeath(IDamagable damagable, DamageInfo info)
     {
+        _healthSystem.OnHitEvent -= OnHit;
         if (info.basicElement.Element == Elements.Element.FIRE)
         {
             ChangeState(GetState(EnemyStateDieByFire.StateType));
